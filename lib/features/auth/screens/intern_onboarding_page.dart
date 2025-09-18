@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:opex_intern_hub/features/intern/screens/intern_dashboard.dart';
-// import 'package:file_picker/file_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:opex_intern_hub/features/intern/screens/onboarding_screen.dart/onboarding_journey.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -12,24 +12,12 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   // Add controllers for each field at the top of _ProfileScreenState
-  final TextEditingController fullNameController = TextEditingController(
-    text: 'Ifeoluwa Bankole Simeon',
-  );
-  final TextEditingController phoneController = TextEditingController(
-    text: '070 000 00 000',
-  );
-  final TextEditingController locationController = TextEditingController(
-    text: 'Lokoja, Nigeria',
-  );
-  final TextEditingController emailController = TextEditingController(
-    text: 'tolagben23@gmail.com',
-  );
-  final TextEditingController fieldOfStudyController = TextEditingController(
-    text: 'Computer Science',
-  );
-  final TextEditingController universityController = TextEditingController(
-    text: 'Lagos State University',
-  );
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController fieldOfStudyController = TextEditingController();
+  final TextEditingController universityController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   XFile? _pickedImage;
@@ -102,6 +90,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               label: 'Full Name',
               icon: Icons.person,
               controller: fullNameController,
+              hintText: 'Ifeoluwa Bankole Simeon',
             ),
 
             SizedBox(height: 20),
@@ -112,6 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               icon: Icons.phone,
               controller: phoneController,
               keyboardType: TextInputType.phone,
+              hintText: '070 000 00 000',
             ),
 
             SizedBox(height: 20),
@@ -121,6 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               label: 'Location',
               icon: Icons.location_on,
               controller: locationController,
+              hintText: 'Lokoja, Nigeria',
             ),
 
             SizedBox(height: 20),
@@ -131,6 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               icon: Icons.email,
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
+              hintText: 'tolagben23@gmail.com',
             ),
 
             SizedBox(height: 30),
@@ -161,6 +153,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildInputField(
                     label: 'Field Of Study',
                     controller: fieldOfStudyController,
+                    hintText: 'Computer Science',
                   ),
 
                   SizedBox(height: 16),
@@ -169,6 +162,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildInputField(
                     label: 'University/Institution',
                     controller: universityController,
+                    hintText: 'Lagos State University',
                   ),
 
                   SizedBox(height: 16),
@@ -248,15 +242,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                   OutlinedButton(
                     onPressed: () async {
-                      // FilePickerResult? result = await FilePicker.platform.pickFiles(
-                      //   type: FileType.custom,
-                      //   allowedExtensions: ['pdf', 'doc', 'docx'],
-                      // );
+                      FilePickerResult? result = await FilePicker.platform
+                          .pickFiles(
+                            type: FileType.custom,
+                            allowedExtensions: ['pdf', 'doc', 'docx'],
+                          );
 
-                      // if (result != null) {
-
-                      //   print('File selected: ${result.files.single.name}');
-                      // }
+                      if (result != null) {
+                        print('File selected: ${result.files.single.name}');
+                      }
                     },
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(color: Color(0xFF3B82F6)),
@@ -332,6 +326,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     TextInputType? keyboardType,
     bool obscureText = false,
     VoidCallback? onToggleVisibility,
+    String? hintText,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -375,7 +370,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onPressed: onToggleVisibility,
                     )
                     : null,
-            hintText: controller.text,
+            hintText: hintText,
             hintStyle: TextStyle(color: Colors.grey[400]),
           ),
         ),

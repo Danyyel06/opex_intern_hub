@@ -51,18 +51,18 @@ class _Stage2ScreenState extends State<Stage2Screen> {
             // Header Image
             Container(
               width: double.infinity,
-              height: 200,
+              height: 300,
               decoration: BoxDecoration(
-                color: Color(0xFFF8F9FA),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Color(0xFFE5E7EB)),
+                border: Border.all(color: Color(0xFF1E3A8A), width: 2),
+                borderRadius: BorderRadius.circular(24),
               ),
-              child: Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(18),
                 child: Image.asset(
-                  'assets/images/services_illustration.png', // Replace with your image path
-                  width: 300,
-                  height: 150,
-                  fit: BoxFit.contain,
+                  'images/Problem Solving 5.png',
+                  fit: BoxFit.cover,
+                  width: 350,
+                  height: 350,
                 ),
               ),
             ),

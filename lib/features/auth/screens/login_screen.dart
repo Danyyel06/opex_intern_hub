@@ -70,13 +70,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: TextFormField(
-                    initialValue: 'apexintern@gmail.com',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w400,
                       color: Color(0xFF374151),
                     ),
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(12)),
                         borderSide: BorderSide(
@@ -87,6 +86,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       contentPadding: EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 16,
+                      ),
+                      hintText: 'opexintern@gmail.com',
+                      hintStyle: const TextStyle(
+                        fontSize: 17,
+                        color: Color(0xFF9CA3AF),
+                        letterSpacing: 1,
                       ),
                     ),
                     keyboardType: TextInputType.emailAddress,

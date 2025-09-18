@@ -31,36 +31,41 @@ class OnboardingJourney extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             // Progress bar
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 8,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    color: const Color(0xFFE5E7EB),
+            Container(
+              width: double.infinity,
+              child: Stack(
+                children: [
+                  // Background (gray) bar
+                  Container(
+                    height: 8,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      color: const Color(0xFFE5E7EB),
+                    ),
                   ),
-                  child: FractionallySizedBox(
+                  // Foreground (blue) progress
+                  FractionallySizedBox(
                     alignment: Alignment.centerLeft,
-                    widthFactor: 0.6,
+                    widthFactor: 0.6, // 60% progress
                     child: Container(
+                      height: 8,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(4),
                         color: const Color(0xFF1E3A8A),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  '60% Complete',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF6B7280),
-                  ),
-                ),
-              ],
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              '60% Complete',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF6B7280),
+              ),
             ),
             const SizedBox(height: 40),
             // Onboarding modules
@@ -183,43 +188,52 @@ class OnboardingJourney extends StatelessWidget {
           ],
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Number circle
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: backgroundColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Center(
-                child: Text(
-                  number,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+            Column(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: backgroundColor,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Center(
+                    child: Text(
+                      number,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
             const SizedBox(width: 16),
             // Content
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color:
-                          isCompleted
-                              ? const Color(0xFF16A34A)
-                              : backgroundColor == const Color(0xFF3B82F6)
-                              ? const Color(0xFF3B82F6)
-                              : const Color(0xFF9CA3AF),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color:
+                            isCompleted
+                                ? const Color(0xFF16A34A)
+                                : backgroundColor == const Color(0xFF3B82F6)
+                                ? const Color(0xFF3B82F6)
+                                : const Color(0xFF9CA3AF),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 4),

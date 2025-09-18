@@ -16,24 +16,24 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: const SizedBox(),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
         actions: [
           Container(
-            margin: const EdgeInsets.only(right: 16, top: 8),
-            width: 40,
-            height: 40,
+            margin: const EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: const Color(0xFF102592),
-              borderRadius: BorderRadius.circular(8),
+              color: const Color(0xFF1E3A8A),
+              borderRadius: BorderRadius.circular(6),
             ),
-            child: const Center(
-              child: Text(
-                '5',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+            child: const Text(
+              '5',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -51,22 +51,24 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
               Center(
                 child: Container(
                   width: double.infinity,
-                  height: 200,
-                  padding: const EdgeInsets.all(20),
+                  height: 300,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 10,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+                    border: Border.all(
+                      color: Color(0xFF1E3A8A), // Deep blue border
+                      width: 3,
+                    ),
+                    borderRadius: BorderRadius.circular(
+                      24,
+                    ), // Rectangular with rounded corners
                   ),
-                  child: Image.asset(
-                    'assets/images/stage5_hero.png', // Replace with your image
-                    fit: BoxFit.contain,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(18),
+                    child: Image.asset(
+                      'images/Progress.png', // Placeholder - replace with your image
+                      fit: BoxFit.cover,
+                      width: 350,
+                      height: 350,
+                    ),
                   ),
                 ),
               ),
@@ -146,19 +148,16 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
                   children: [
                     _buildRoleCard(
                       'Product Manager',
-                      'assets/images/product_manager.png',
+                      'images/Product Manager.png',
                     ),
                     _buildRoleCard(
                       'Front-End Engineer',
-                      'assets/images/frontend_engineer.png',
+                      'images/Web Development 2 (1).png',
                     ),
-                    _buildRoleCard(
-                      'Back-End Engineer',
-                      'assets/images/backend_engineer.png',
-                    ),
+                    _buildRoleCard('Back-End Engineer', 'images/Coding 2.png'),
                     _buildRoleCard(
                       'UI/UX Designer',
-                      'assets/images/uiux_designer.png',
+                      'images/Wireframe (1).png',
                     ),
                   ],
                 ),

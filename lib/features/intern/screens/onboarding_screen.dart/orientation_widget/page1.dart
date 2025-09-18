@@ -19,29 +19,33 @@ class _OpexFoundationScreenState extends State<OpexFoundationScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Container(
-          width: 24,
-          height: 24,
-          decoration: const BoxDecoration(
-            color: Color(0xFF1E3A8A),
-            shape: BoxShape.circle,
-          ),
-          child: const Center(
-            child: Text(
-              '1',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+        actions: [
+          Container(
+            margin: EdgeInsets.only(right: 16, top: 8, bottom: 8),
+            width: 32,
+            height: 32,
+            decoration: const BoxDecoration(
+              color: Color(0xFF1E3A8A),
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+            ),
+            child: const Center(
+              child: Text(
+                '1',
+                textAlign: TextAlign.right,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
-        ),
+        ],
         centerTitle: false,
-        actions: const [SizedBox(width: 16)],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -57,10 +61,24 @@ class _OpexFoundationScreenState extends State<OpexFoundationScreen> {
                   Center(
                     child: Container(
                       width: double.infinity,
-                      height: 150,
-                      child: Image.asset(
-                        'assets/images/opex_illustration.png', // Placeholder - replace with your image
-                        fit: BoxFit.contain,
+                      height: 300,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Color(0xFF1E3A8A), // Deep blue border
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(
+                          24,
+                        ), // Rectangular with rounded corners
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(18),
+                        child: Image.asset(
+                          'images/Step One 1.png', // Placeholder - replace with your image
+                          fit: BoxFit.cover,
+                          width: 350,
+                          height: 350,
+                        ),
                       ),
                     ),
                   ),

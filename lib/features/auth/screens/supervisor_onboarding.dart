@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
 
-class SupervisorProfileScreen extends StatelessWidget {
+class SupervisorProfileScreen extends StatefulWidget {
   const SupervisorProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  _SupervisorProfileScreenState createState() =>
+      _SupervisorProfileScreenState();
+}
+
+class _SupervisorProfileScreenState extends State<SupervisorProfileScreen> {
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController roleController = TextEditingController();
+  final TextEditingController departmentController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool _obscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +32,7 @@ class SupervisorProfileScreen extends StatelessWidget {
         title: const Text(
           'Supervisor Profile',
           style: TextStyle(
-            color: Color(0xFF1E3A8A), // Blue color
+            color: Color(0xFF1E3A8A),
             fontSize: 24,
             fontWeight: FontWeight.w600,
           ),
@@ -42,33 +57,41 @@ class SupervisorProfileScreen extends StatelessWidget {
                 child: const Icon(Icons.person, size: 50, color: Colors.black),
               ),
             ),
-
             const SizedBox(height: 40),
-
             // Full Name Section
-            _buildInfoSection(
-              'Full Name',
-              'Ifeoluwa Bankole Simeon',
-              Icons.person,
+            _buildInputField(
+              label: 'Full Name',
+              icon: Icons.person,
+              controller: fullNameController,
+              hintText: 'Ifeoluwa Bankole Simeon',
             ),
-
             const SizedBox(height: 24),
-
             // Phone Number Section
-            _buildInfoSection('Phone Number', '070 000 00 000', Icons.phone),
-
+            _buildInputField(
+              label: 'Phone Number',
+              icon: Icons.phone,
+              controller: phoneController,
+              keyboardType: TextInputType.phone,
+              hintText: '070 000 00 000',
+            ),
             const SizedBox(height: 24),
-
             // Location Section
-            _buildInfoSection('Location', 'Lokoja, Nigeria', Icons.location_on),
-
+            _buildInputField(
+              label: 'Location',
+              icon: Icons.location_on,
+              controller: locationController,
+              hintText: 'Lokoja, Nigeria',
+            ),
             const SizedBox(height: 24),
-
             // Email Section
-            _buildInfoSection('Email', 'tolagben23@gmail.com', Icons.email),
-
+            _buildInputField(
+              label: 'Email',
+              icon: Icons.email,
+              controller: emailController,
+              keyboardType: TextInputType.emailAddress,
+              hintText: 'tolagben23@gmail.com',
+            ),
             const SizedBox(height: 40),
-
             // Supervisor's & Personal Information Card
             Container(
               width: double.infinity,
@@ -88,51 +111,38 @@ class SupervisorProfileScreen extends StatelessWidget {
                       color: Colors.black,
                     ),
                   ),
-
                   const SizedBox(height: 20),
-
                   // Role/Title
-                  _buildCardInfoRow('Role/Title', 'Senior Software Engineer'),
-
+                  _buildInputField(
+                    label: 'Role/Title',
+                    controller: roleController,
+                    hintText: 'Senior Software Engineer',
+                  ),
                   const SizedBox(height: 16),
-
                   // Department
-                  _buildCardInfoRow('Department', 'Software Engineering'),
-
+                  _buildInputField(
+                    label: 'Department',
+                    controller: departmentController,
+                    hintText: 'Software Engineering',
+                  ),
                   const SizedBox(height: 16),
-
                   // New Password
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'New Password',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Color(0xFF6B7280),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      const Text(
-                        '••••••••',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 2,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Container(height: 1, color: const Color(0xFFE5E7EB)),
-                    ],
+                  _buildInputField(
+                    label: 'New Password',
+                    controller: passwordController,
+                    isPassword: true,
+                    obscureText: _obscurePassword,
+                    onToggleVisibility: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                    hintText: 'Enter new password',
                   ),
                 ],
               ),
             ),
-
             const SizedBox(height: 40),
-
             // Complete Profile Button
             SizedBox(
               width: double.infinity,
@@ -158,15 +168,23 @@ class SupervisorProfileScreen extends StatelessWidget {
                 ),
               ),
             ),
-
-            const SizedBox(height: 40), // Extra bottom padding
+            const SizedBox(height: 40),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildInfoSection(String label, String value, IconData icon) {
+  Widget _buildInputField({
+    required String label,
+    IconData? icon,
+    required TextEditingController controller,
+    bool isPassword = false,
+    TextInputType? keyboardType,
+    bool obscureText = false,
+    VoidCallback? onToggleVisibility,
+    String? hintText,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -179,49 +197,43 @@ class SupervisorProfileScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        Row(
-          children: [
-            Icon(icon, size: 20, color: Colors.black),
-            const SizedBox(width: 12),
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-              ),
+        TextField(
+          controller: controller,
+          obscureText: isPassword ? obscureText : false,
+          keyboardType: keyboardType,
+          decoration: InputDecoration(
+            prefixIcon:
+                icon != null ? Icon(icon, size: 20, color: Colors.black) : null,
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: 12,
             ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Container(height: 1, color: const Color(0xFFE5E7EB)),
-      ],
-    );
-  }
-
-  Widget _buildCardInfoRow(String label, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 12,
-            color: Color(0xFF6B7280),
-            fontWeight: FontWeight.w500,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(color: Color(0xFF1E3A8A)),
+            ),
+            suffixIcon:
+                isPassword
+                    ? IconButton(
+                      icon: Icon(
+                        obscureText ? Icons.visibility_off : Icons.visibility,
+                        color: Colors.grey,
+                      ),
+                      onPressed: onToggleVisibility,
+                    )
+                    : null,
+            hintText: hintText,
+            hintStyle: TextStyle(color: Colors.grey[400]),
           ),
         ),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 16,
-            color: Colors.black,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Container(height: 1, color: const Color(0xFFE5E7EB)),
       ],
     );
   }

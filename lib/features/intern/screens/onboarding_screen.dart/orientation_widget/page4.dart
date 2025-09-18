@@ -19,27 +19,29 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: const Icon(Icons.arrow_back, color: Colors.black),
-        title: Container(
-          width: 30,
-          height: 30,
-          decoration: const BoxDecoration(
-            color: Color(0xFF1E3A8A),
-            shape: BoxShape.circle,
-          ),
-          child: const Center(
-            child: Text(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        actions: [
+          Container(
+            margin: const EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: const Color(0xFF1E3A8A),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: const Text(
               '4',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
-        ),
+        ],
         centerTitle: false,
-        actions: const [SizedBox(width: 16)],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
@@ -49,18 +51,24 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
             // Hero Image
             Center(
               child: Container(
-                width: 200,
-                height: 150,
+                width: double.infinity,
+                height: 300,
                 decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Color(0xFF1E3A8A), // Deep blue border
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(
+                    24,
+                  ), // Rectangular with rounded corners
                 ),
-                child: const Center(
-                  child: Image(
-                    image: AssetImage('assets/images/partners_handshake.png'),
-                    width: 180,
-                    height: 130,
-                    fit: BoxFit.contain,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(18),
+                  child: Image.asset(
+                    'images/Handshake.png',
+                    fit: BoxFit.cover,
+                    width: 350,
+                    height: 350,
                   ),
                 ),
               ),
@@ -230,7 +238,7 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF1E3A8A),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   elevation: 0,
                 ),

@@ -19,13 +19,16 @@ class _LeadershipStage3ScreenState extends State<LeadershipStage3Screen> {
       appBar: AppBar(
         backgroundColor: const Color(0xFFF8F9FA),
         elevation: 0,
-        leading: const Icon(Icons.arrow_back, color: Color(0xFF1A1A1A)),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 16),
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: const Color(0xFF2B5CE6),
+              color: const Color(0xFF1E3A8A),
               borderRadius: BorderRadius.circular(6),
             ),
             child: const Text(
@@ -45,219 +48,185 @@ class _LeadershipStage3ScreenState extends State<LeadershipStage3Screen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header Image and Content
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.04),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Illustration
-                  Center(
-                    child: Container(
-                      height: 120,
-                      width: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Illustration
+                Center(
+                  child: Container(
+                    width: double.infinity,
+                    height: 300,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Color(0xFF1E3A8A), width: 2),
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(18),
                       child: Image.asset(
-                        'assets/images/leadership_illustration.png',
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: Colors.grey[200],
-                            child: const Icon(
-                              Icons.image,
-                              color: Colors.grey,
-                              size: 40,
-                            ),
-                          );
-                        },
+                        'images/Leadership 2 (1).png',
+                        fit: BoxFit.cover,
+                        width: 350,
+                        height: 350,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                ),
+                const SizedBox(height: 20),
 
-                  // Stage 3 Header
-                  const Text(
-                    'STAGE 3',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF6B7280),
-                      letterSpacing: 1.2,
-                    ),
+                // Stage 3 Header
+                const Text(
+                  'STAGE 3',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF6B7280),
+                    letterSpacing: 1.2,
                   ),
-                  const SizedBox(height: 8),
+                ),
+                const SizedBox(height: 8),
 
-                  // Title
-                  const Text(
-                    'Our Leadership',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF1A1A1A),
-                    ),
+                // Title
+                const Text(
+                  'Our Leadership',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF1A1A1A),
                   ),
-                  const SizedBox(height: 16),
+                ),
+                const SizedBox(height: 16),
 
-                  // Description
-                  const Text(
-                    'This module introduces you to the visionaries who are shaping the future of Opex Consulting and guiding our clients to new heights of success. Our core leadership team brings a wealth of knowledge, strategic vision, and a commitment to excellence, with decades of combined experience in fintech, commercial banking, and financial institutions. They are the driving force behind our top-tier consulting, technology solutions, and training for clients.',
-                    style: TextStyle(
-                      fontSize: 14,
-                      height: 1.5,
-                      color: Color(0xFF4B5563),
-                    ),
+                // Description
+                const Text(
+                  'This module introduces you to the visionaries who are shaping the future of Opex Consulting and guiding our clients to new heights of success. Our core leadership team brings a wealth of knowledge, strategic vision, and a commitment to excellence, with decades of combined experience in fintech, commercial banking, and financial institutions. They are the driving force behind our top-tier consulting, technology solutions, and training for clients.',
+                  style: TextStyle(
+                    fontSize: 14,
+                    height: 1.5,
+                    color: Color(0xFF4B5563),
                   ),
-                  const SizedBox(height: 20),
+                ),
+                const SizedBox(height: 20),
 
-                  // Core and Team Leadership
-                  const Text(
-                    'Core and Team Leadership',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF1A1A1A),
-                    ),
+                // Core and Team Leadership
+                const Text(
+                  'Core and Team Leadership',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF1A1A1A),
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Our leadership is structured into two main groups: the Core leadership team and the Board of Teams. The Core Leadership team includes key figures like Musibau Lasisi, our MD/CEO, and Oladapo Olagbaye, in Finance. These leaders ensure that every part of our company aligns with our mission of providing world class expertise.',
-                    style: TextStyle(
-                      fontSize: 14,
-                      height: 1.5,
-                      color: Color(0xFF4B5563),
-                    ),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Our leadership is structured into two main groups: the Core leadership team and the Board of Teams. The Core Leadership team includes key figures like Musibau Lasisi, our MD/CEO, and Oladapo Olagbaye, in Finance. These leaders ensure that every part of our company aligns with our mission of providing world class expertise.',
+                  style: TextStyle(
+                    fontSize: 14,
+                    height: 1.5,
+                    color: Color(0xFF4B5563),
                   ),
-                  const SizedBox(height: 20),
+                ),
+                const SizedBox(height: 20),
 
-                  // A Network of Specialists
-                  const Text(
-                    'A Network of Specialists',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF1A1A1A),
-                    ),
+                // A Network of Specialists
+                const Text(
+                  'A Network of Specialists',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF1A1A1A),
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Supporting the core leaders are our Heads of Teams, who bring their specialized skills to each department. This group includes our Engineering Manager, Infrastructure Manager, Sales Manager, Cybersecurity and Business Development. Together, our leaders work to ensure we are always at the forefront of the industry, delivering innovative solutions to our clients.',
-                    style: TextStyle(
-                      fontSize: 14,
-                      height: 1.5,
-                      color: Color(0xFF4B5563),
-                    ),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Supporting the core leaders are our Heads of Teams, who bring their specialized skills to each department. This group includes our Engineering Manager, Infrastructure Manager, Sales Manager, Cybersecurity and Business Development. Together, our leaders work to ensure we are always at the forefront of the industry, delivering innovative solutions to our clients.',
+                  style: TextStyle(
+                    fontSize: 14,
+                    height: 1.5,
+                    color: Color(0xFF4B5563),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
 
             const SizedBox(height: 24),
 
             // Questions Section
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.04),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Questions',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF1A1A1A),
                   ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Questions',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF1A1A1A),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
+                ),
+                const SizedBox(height: 20),
 
-                  // Question 1
-                  _buildQuestion(
-                    questionNumber: 1,
-                    question:
-                        'What is the main role of Opex Consulting\'s leadership team?',
-                    options: [
-                      'Handling all client support requests and complaints.',
-                      'Providing top-tier consulting advisory and technology solutions.',
-                      'Managing daily administrative tasks.',
-                      'Directly managing every single project in a centralized order.',
-                    ],
-                    selectedValue: question1Answer,
-                    onChanged: (value) {
-                      setState(() {
-                        question1Answer = value;
-                      });
-                    },
-                    correctAnswer: 1,
-                  ),
+                // Question 1
+                _buildQuestion(
+                  questionNumber: 1,
+                  question:
+                      'What is the main role of Opex Consulting\'s leadership team?',
+                  options: [
+                    'Handling all client support requests and complaints.',
+                    'Providing top-tier consulting advisory and technology solutions.',
+                    'Managing daily administrative tasks.',
+                    'Directly managing every single project in a centralized order.',
+                  ],
+                  selectedValue: question1Answer,
+                  onChanged: (value) {
+                    setState(() {
+                      question1Answer = value;
+                    });
+                  },
+                  correctAnswer: 1,
+                ),
 
-                  const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-                  // Question 2
-                  _buildQuestion(
-                    questionNumber: 2,
-                    question:
-                        'According to the provided text, the Opex leadership team has combined experience in which industries?',
-                    options: [
-                      'Agriculture, education management and manufacturing.',
-                      'Fintech, commercial banking, and financial institutions.',
-                      'E-commerce, security management and retail.',
-                      'Human Resources, management and accounting.',
-                    ],
-                    selectedValue: question2Answer,
-                    onChanged: (value) {
-                      setState(() {
-                        question2Answer = value;
-                      });
-                    },
-                    correctAnswer: 1,
-                  ),
+                // Question 2
+                _buildQuestion(
+                  questionNumber: 2,
+                  question:
+                      'According to the provided text, the Opex leadership team has combined experience in which industries?',
+                  options: [
+                    'Agriculture, education management and manufacturing.',
+                    'Fintech, commercial banking, and financial institutions.',
+                    'E-commerce, security management and retail.',
+                    'Human Resources, management and accounting.',
+                  ],
+                  selectedValue: question2Answer,
+                  onChanged: (value) {
+                    setState(() {
+                      question2Answer = value;
+                    });
+                  },
+                  correctAnswer: 1,
+                ),
 
-                  const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-                  // Question 3
-                  _buildQuestion(
-                    questionNumber: 3,
-                    question: 'Who is Opex Consulting\'s MD/CEO?',
-                    options: [
-                      'Samson Adejumo',
-                      'Musibau Lasisi',
-                      'Omotayo Oladapo',
-                      'Seun Akinyemi',
-                    ],
-                    selectedValue: question3Answer,
-                    onChanged: (value) {
-                      setState(() {
-                        question3Answer = value;
-                      });
-                    },
-                    correctAnswer: 1,
-                  ),
-                ],
-              ),
+                // Question 3
+                _buildQuestion(
+                  questionNumber: 3,
+                  question: 'Who is Opex Consulting\'s MD/CEO?',
+                  options: [
+                    'Samson Adejumo',
+                    'Musibau Lasisi',
+                    'Omotayo Oladapo',
+                    'Seun Akinyemi',
+                  ],
+                  selectedValue: question3Answer,
+                  onChanged: (value) {
+                    setState(() {
+                      question3Answer = value;
+                    });
+                  },
+                  correctAnswer: 1,
+                ),
+              ],
             ),
 
             const SizedBox(height: 32),
