@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:opex_intern_hub/features/intern/screens/intern_dashboard.dart';
+import 'package:opex_intern_hub/features/intern/screens/onboarding_screen/orientation_widget/complete_onboarding.dart';
 
 class OnboardingStage5 extends StatefulWidget {
   @override
@@ -176,7 +176,7 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => InternDashboard(),
+                                builder: (context) => CongratulationsScreen(),
                               ),
                             );
                             print('Selected path: $selectedPath');
