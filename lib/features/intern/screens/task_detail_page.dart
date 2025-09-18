@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 
 class TaskDetailScreen extends StatelessWidget {
   const TaskDetailScreen({Key? key}) : super(key: key);
@@ -161,7 +163,7 @@ class TaskDetailScreen extends StatelessWidget {
                             width: 48,
                             height: 48,
                             decoration: BoxDecoration(
-                              color: const Color(0xFF2E5CE6),
+                              color: const Color(0xFF1E3A8A),
                               borderRadius: BorderRadius.circular(24),
                             ),
                             child: const Icon(
@@ -192,11 +194,23 @@ class TaskDetailScreen extends StatelessWidget {
 
                           // Browse files button
                           OutlinedButton(
-                            onPressed: () {
-                              // Handle browse files
+                            onPressed: () async {
+                              FilePickerResult? result = await FilePicker
+                                  .platform
+                                  .pickFiles(
+                                    type: FileType.custom,
+                                    allowedExtensions: ['pdf', 'doc', 'docx'],
+                                  );
+
+                              if (result != null) {
+                                print(
+                                  'File selected: ${result.files.single.name}',
+                                );
+                              }
                             },
+
                             style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: Color(0xFF2E5CE6)),
+                              side: const BorderSide(color: Color(0xFF1E3A8A)),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(6),
                               ),
@@ -208,7 +222,7 @@ class TaskDetailScreen extends StatelessWidget {
                             child: const Text(
                               'Browse files',
                               style: TextStyle(
-                                color: Color(0xFF2E5CE6),
+                                color: Color(0xFF1E3A8A),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -229,7 +243,7 @@ class TaskDetailScreen extends StatelessWidget {
                           // Handle submit
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF2E5CE6),
+                          backgroundColor: const Color(0xFF1E3A8A),
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(

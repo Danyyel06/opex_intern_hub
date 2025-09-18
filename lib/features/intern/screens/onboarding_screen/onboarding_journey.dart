@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:opex_intern_hub/features/intern/screens/onboarding_screen.dart/orientation_widget/page1.dart';
-import 'package:opex_intern_hub/features/intern/screens/onboarding_screen.dart/orientation_widget/page2.dart';
-import 'package:opex_intern_hub/features/intern/screens/onboarding_screen.dart/orientation_widget/page3.dart';
-import 'package:opex_intern_hub/features/intern/screens/onboarding_screen.dart/orientation_widget/page4.dart';
-import 'package:opex_intern_hub/features/intern/screens/onboarding_screen.dart/orientation_widget/page5.dart';
+import 'package:opex_intern_hub/features/intern/screens/onboarding_screen/orientation_widget/page1.dart';
+import 'package:opex_intern_hub/features/intern/screens/onboarding_screen/orientation_widget/page2.dart';
+import 'package:opex_intern_hub/features/intern/screens/onboarding_screen/orientation_widget/page3.dart';
+import 'package:opex_intern_hub/features/intern/screens/onboarding_screen/orientation_widget/page4.dart';
+import 'package:opex_intern_hub/features/intern/screens/onboarding_screen/orientation_widget/page5.dart';
 
 class OnboardingJourney extends StatelessWidget {
   const OnboardingJourney({Key? key}) : super(key: key);

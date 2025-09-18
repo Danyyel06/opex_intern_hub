@@ -56,26 +56,6 @@ class _InternDashboardState extends State<InternDashboard> {
                             color: Color(0xFF1A1A1A),
                           ),
                         ),
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 8,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: const Icon(
-                            Icons.refresh,
-                            color: Color(0xFF666666),
-                            size: 20,
-                          ),
-                        ),
                       ],
                     ),
 
@@ -139,7 +119,7 @@ class _InternDashboardState extends State<InternDashboard> {
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
-                                  color: Color(0xFF4F46E5),
+                                  color: Color(0xFF1E3A8A),
                                 ),
                               ),
                             ],
@@ -160,7 +140,7 @@ class _InternDashboardState extends State<InternDashboard> {
                               widthFactor: 0.9,
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF4F46E5),
+                                  color: const Color(0xFF1E3A8A),
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                               ),
@@ -174,9 +154,16 @@ class _InternDashboardState extends State<InternDashboard> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => TaskListScreen(),
+                                    ),
+                                  );
+                                },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF4F46E5),
+                                  backgroundColor: const Color(0xFF1E3A8A),
                                   foregroundColor: Colors.white,
                                   elevation: 0,
                                   padding: const EdgeInsets.symmetric(
@@ -198,13 +185,13 @@ class _InternDashboardState extends State<InternDashboard> {
                               Row(
                                 children: [
                                   Icon(
-                                    Icons.access_time,
+                                    Icons.calendar_month,
                                     color: const Color(0xFF666666),
                                     size: 16,
                                   ),
                                   const SizedBox(width: 4),
                                   const Text(
-                                    '1 Hour',
+                                    '18-09-25',
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
@@ -237,114 +224,136 @@ class _InternDashboardState extends State<InternDashboard> {
                     // Mentor Card
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(
+                        28,
+                      ), // Increased padding for a bigger card
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(
+                          20,
+                        ), // Slightly larger radius
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.08),
-                            blurRadius: 20,
-                            offset: const Offset(0, 4),
+                            blurRadius: 24, // Slightly more blur
+                            offset: const Offset(0, 6),
                           ),
                         ],
                       ),
-                      child: Row(
+                      child: Stack(
                         children: [
-                          // Profile Image
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(25),
-                              color: const Color(0xFFE5E7EB),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(25),
-                              child: Image.asset(
-                                'assets/images/mentor_profile.png', // Replace with your image path
-                                width: 50,
-                                height: 50,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    width: 50,
-                                    height: 50,
-                                    color: const Color(0xFFE5E7EB),
-                                    child: const Icon(
-                                      Icons.person,
-                                      color: Color(0xFF9CA3AF),
-                                      size: 24,
-                                    ),
-                                  );
-                                },
+                          // Top-right label inside the card
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFE0E7FF),
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(12),
+                                  bottomLeft: Radius.circular(12),
+                                ),
+                              ),
+                              child: const Text(
+                                'Supervisor',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color(0xFF1E3A8A),
+                                ),
                               ),
                             ),
                           ),
-
-                          const SizedBox(width: 16),
-
-                          // Name and Title
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          // Main Row content
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              top: 40,
+                            ), // Space for label
+                            child: Row(
                               children: [
-                                Row(
-                                  children: [
-                                    const Text(
-                                      'Samson Adejumo',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: Color(0xFF1A1A1A),
-                                      ),
+                                // Profile Image
+                                Container(
+                                  width: 60,
+                                  height: 60,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
+                                    color: const Color(0xFFE5E7EB),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(30),
+                                    child: Image.asset(
+                                      'assets/images/mentor_profile.png',
+                                      width: 60,
+                                      height: 60,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (
+                                        context,
+                                        error,
+                                        stackTrace,
+                                      ) {
+                                        return Container(
+                                          width: 60,
+                                          height: 60,
+                                          color: const Color(0xFFE5E7EB),
+                                          child: const Icon(
+                                            Icons.person,
+                                            color: Color(0xFF9CA3AF),
+                                            size: 28,
+                                          ),
+                                        );
+                                      },
                                     ),
-                                    const SizedBox(width: 8),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                        vertical: 2,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFE0E7FF),
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: const Text(
-                                        'Supervisor',
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                // Name and Title
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Samson Adejumo',
                                         style: TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w500,
-                                          color: Color(0xFF4F46E5),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: Color(0xFF1A1A1A),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                      const SizedBox(height: 4),
+                                      const Text(
+                                        'Senior Software Engineer',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                          color: Color(0xFF9CA3AF),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                const SizedBox(height: 4),
-                                const Text(
-                                  'Senior Software Engineer',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xFF9CA3AF),
+                                // Arrow Button
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 58.0),
+                                  child: Container(
+                                    width: 36,
+                                    height: 36,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF1E3A8A),
+                                      borderRadius: BorderRadius.circular(22),
+                                    ),
+                                    child: const Icon(
+                                      Icons.arrow_forward,
+                                      color: Colors.white,
+                                      size: 22,
+                                    ),
                                   ),
                                 ),
                               ],
-                            ),
-                          ),
-
-                          // Arrow Button
-                          Container(
-                            width: 36,
-                            height: 36,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF4F46E5),
-                              borderRadius: BorderRadius.circular(18),
-                            ),
-                            child: const Icon(
-                              Icons.arrow_forward,
-                              color: Colors.white,
-                              size: 18,
                             ),
                           ),
                         ],
@@ -402,7 +411,7 @@ class _InternDashboardState extends State<InternDashboard> {
       children: [
         Icon(
           icon,
-          color: isActive ? const Color(0xFF4F46E5) : const Color(0xFF9CA3AF),
+          color: isActive ? const Color(0xFF1E3A8A) : const Color(0xFF9CA3AF),
           size: 24,
         ),
         const SizedBox(height: 4),
@@ -411,7 +420,7 @@ class _InternDashboardState extends State<InternDashboard> {
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w500,
-            color: isActive ? const Color(0xFF4F46E5) : const Color(0xFF9CA3AF),
+            color: isActive ? const Color(0xFF1E3A8A) : const Color(0xFF9CA3AF),
           ),
         ),
       ],

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-// import 'package:opex_intern_hub/features/intern/screens/intern_dashboard.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:opex_intern_hub/features/intern/screens/onboarding_screen.dart/onboarding_journey.dart';
+import 'package:opex_intern_hub/features/intern/screens/onboarding_screen/onboarding_journey.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -253,7 +252,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       }
                     },
                     style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: Color(0xFF3B82F6)),
+                      side: BorderSide(color: Color(0xFF1E3A8A)),
                       padding: EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 12,
@@ -265,7 +264,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Text(
                       'Browse files',
                       style: TextStyle(
-                        color: Color(0xFF3B82F6),
+                        color: Color(0xFF1E3A8A),
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:opex_intern_hub/features/intern/screens/intern_dashboard.dart';
 
 class CongratulationsScreen extends StatelessWidget {
   const CongratulationsScreen({super.key});
@@ -28,11 +29,11 @@ class CongratulationsScreen extends StatelessWidget {
                     width: 80,
                     height: 80,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF1B4EAE),
+                      color: const Color(0xFF1E3A8A),
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF1B4EAE).withOpacity(0.2),
+                          color: const Color(0xFF1E3A8A).withOpacity(0.2),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -56,7 +57,7 @@ class CongratulationsScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF1B4EAE),
+                  color: Color(0xFF1E3A8A),
                   letterSpacing: -0.5,
                 ),
                 textAlign: TextAlign.center,
@@ -97,10 +98,15 @@ class CongratulationsScreen extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     // Handle button press
-                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => InternDashboard(),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1B4EAE),
+                    backgroundColor: const Color(0xFF1E3A8A),
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shadowColor: Colors.transparent,

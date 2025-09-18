@@ -76,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF1E40AF),
+                      color: Color(0xFF1E3A8A),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -110,7 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF1E40AF),
+                        color: Color(0xFF1E3A8A),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -149,7 +149,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF1E40AF),
+                        color: Color(0xFF1E3A8A),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -263,7 +263,7 @@ Widget _buildNavItem(IconData icon, String label, bool isActive) {
     children: [
       Icon(
         icon,
-        color: isActive ? const Color(0xFF4F46E5) : const Color(0xFF9CA3AF),
+        color: isActive ? const Color(0xFF1E3A8A) : const Color(0xFF9CA3AF),
         size: 24,
       ),
       const SizedBox(height: 4),
@@ -272,7 +272,7 @@ Widget _buildNavItem(IconData icon, String label, bool isActive) {
         style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w500,
-          color: isActive ? const Color(0xFF4F46E5) : const Color(0xFF9CA3AF),
+          color: isActive ? const Color(0xFF1E3A8A) : const Color(0xFF9CA3AF),
         ),
       ),
     ],

@@ -255,7 +255,7 @@ class ProjectCard extends StatelessWidget {
                       widthFactor: progress,
                       child: Container(
                         decoration: BoxDecoration(
-                          color: const Color(0xFF3B82F6),
+                          color: const Color(0xFF1E3A8A),
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),
@@ -268,7 +268,7 @@ class ProjectCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF3B82F6),
+                    color: Color(0xFF1E3A8A),
                   ),
                 ),
               ],
@@ -283,7 +283,7 @@ class ProjectCard extends StatelessWidget {
                 ElevatedButton(
                   onPressed: onTap,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1E40AF),
+                    backgroundColor: const Color(0xFF1E3A8A),
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
@@ -342,7 +342,7 @@ class ProjectCard extends StatelessWidget {
       case ProjectStatus.active:
         return 'Active';
       case ProjectStatus.inProgress:
-        return 'In Progress';
+        return 'Awaiting Review';
       case ProjectStatus.completed:
         return 'Completed';
     }
@@ -374,7 +374,7 @@ class BottomNavItem extends StatelessWidget {
             icon,
             size: 24,
             color:
-                isSelected ? const Color(0xFF3B82F6) : const Color(0xFF6B7280),
+                isSelected ? const Color(0xFF1E3A8A) : const Color(0xFF6B7280),
           ),
           const SizedBox(height: 4),
           Text(
@@ -384,7 +384,7 @@ class BottomNavItem extends StatelessWidget {
               fontWeight: FontWeight.w500,
               color:
                   isSelected
-                      ? const Color(0xFF3B82F6)
+                      ? const Color(0xFF1E3A8A)
                       : const Color(0xFF6B7280),
             ),
           ),
@@ -400,7 +400,7 @@ Widget _buildNavItem(IconData icon, String label, bool isActive) {
     children: [
       Icon(
         icon,
-        color: isActive ? const Color(0xFF4F46E5) : const Color(0xFF9CA3AF),
+        color: isActive ? const Color(0xFF1E3A8A) : const Color(0xFF9CA3AF),
         size: 24,
       ),
       const SizedBox(height: 4),
@@ -409,7 +409,7 @@ Widget _buildNavItem(IconData icon, String label, bool isActive) {
         style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w500,
-          color: isActive ? const Color(0xFF4F46E5) : const Color(0xFF9CA3AF),
+          color: isActive ? const Color(0xFF1E3A8A) : const Color(0xFF9CA3AF),
         ),
       ),
     ],
