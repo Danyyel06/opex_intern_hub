@@ -8,9 +8,9 @@ class Stage4PartnersScreen extends StatefulWidget {
 }
 
 class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
-  int? selectedQuestion1;
-  int? selectedQuestion2;
-  int? selectedQuestion3;
+  int? question1Answer;
+  int? question2Answer;
+  int? question3Answer;
 
   @override
   Widget build(BuildContext context) {
@@ -161,98 +161,114 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
             const SizedBox(height: 40),
 
             // Questions Section
-            const Text(
-              'Questions',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Questions',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF1A1A1A),
+                  ),
+                ),
+                const SizedBox(height: 20),
 
-            const SizedBox(height: 24),
+                // Question 1
+                _buildQuestion(
+                  questionNumber: 1,
+                  question:
+                      'What is the primary purpose of Opex Consulting\'s partnerships?',
+                  options: [
+                    'To help us create our own products.',
+                    'To manage our company\'s marketing efforts.',
+                    'To shape the future of financial services.',
+                    'To manage our company\'s marketing efforts.',
+                  ],
+                  selectedValue: question1Answer,
+                  onChanged: (value) {
+                    setState(() {
+                      question1Answer = value;
+                    });
+                  },
+                  correctAnswer: 2,
+                ),
 
-            // Question 1
-            _buildQuestion(
-              questionNumber: '1',
-              questionText:
-                  'What is the primary purpose of Opex Consulting\'s partnerships?',
-              options: [
-                'To help us create our own products.',
-                'To shape the future of financial services.',
-                'To manage our company\'s marketing efforts.',
-                'To manage our company\'s marketing efforts.',
+                const SizedBox(height: 24),
+
+                // Question 2
+                _buildQuestion(
+                  questionNumber: 2,
+                  question:
+                      'According to the provided text, Opex Consulting\'s partnerships are part of what kind of strategy?',
+                  options: [
+                    'A global partnership strategy.',
+                    'A brand marketing strategy.',
+                    'A local market strategy.',
+                    'A talent acquisition strategy.',
+                  ],
+                  selectedValue: question2Answer,
+                  onChanged: (value) {
+                    setState(() {
+                      question2Answer = value;
+                    });
+                  },
+                  correctAnswer: 0,
+                ),
+
+                const SizedBox(height: 24),
+
+                // Question 3
+                _buildQuestion(
+                  questionNumber: 3,
+                  question:
+                      'What is the strength of Opex\'s relationships with its partners based on?',
+                  options: [
+                    'A commitment to a single business sector.',
+                    'A history of direct competition.',
+                    'A focus on developing only internal solutions.',
+                    'A shared commitment to innovation and excellence.',
+                  ],
+                  selectedValue: question3Answer,
+                  onChanged: (value) {
+                    setState(() {
+                      question3Answer = value;
+                    });
+                  },
+                  correctAnswer: 3,
+                ),
               ],
-              selectedValue: selectedQuestion1,
-              onChanged: (value) => setState(() => selectedQuestion1 = value),
-              correctAnswer: 1,
             ),
-
-            const SizedBox(height: 24),
-
-            // Question 2
-            _buildQuestion(
-              questionNumber: '2',
-              questionText:
-                  'According to the provided text, Opex Consulting\'s partnerships are part of what kind of strategy?',
-              options: [
-                'A brand marketing strategy.',
-                'A global partnership strategy.',
-                'A local market strategy.',
-                'A talent acquisition strategy.',
-              ],
-              selectedValue: selectedQuestion2,
-              onChanged: (value) => setState(() => selectedQuestion2 = value),
-              correctAnswer: 1,
-            ),
-
-            const SizedBox(height: 24),
-
-            // Question 3
-            _buildQuestion(
-              questionNumber: '3',
-              questionText:
-                  'What is the strength of Opex\'s relationships with its partners based on?',
-              options: [
-                'A history of direct competition.',
-                'A shared commitment to innovation and excellence.',
-                'A commitment to single business sector.',
-                'A focus on developing only internal solutions.',
-              ],
-              selectedValue: selectedQuestion3,
-              onChanged: (value) => setState(() => selectedQuestion3 = value),
-              correctAnswer: 1,
-            ),
-
             const SizedBox(height: 40),
 
-            // Submit Button
-            Container(
+            SizedBox(
               width: double.infinity,
-              height: 50,
+              height: 48,
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  // Handle submit action
-                },
+                onPressed:
+                    _allQuestionsAnswered()
+                        ? () {
+                          // Handle submit action
+                          _submitAnswers();
+                        }
+                        : null,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1E3A8A),
+                  backgroundColor: const Color(0xFF2B5CE6),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   elevation: 0,
                 ),
                 child: const Text(
                   'Submit & Continue',
                   style: TextStyle(
-                    color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
+                    color: Colors.white,
                   ),
                 ),
               ),
             ),
-
             const SizedBox(height: 20),
           ],
         ),
@@ -261,8 +277,8 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
   }
 
   Widget _buildQuestion({
-    required String questionNumber,
-    required String questionText,
+    required int questionNumber,
+    required String question,
     required List<String> options,
     required int? selectedValue,
     required Function(int?) onChanged,
@@ -271,117 +287,110 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '$questionNumber. ',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
-              ),
-            ),
-            Expanded(
-              child: Text(
-                questionText,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                  height: 1.3,
-                ),
-              ),
-            ),
-          ],
+        Text(
+          '$questionNumber. $question',
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Color(0xFF1A1A1A),
+            height: 1.4,
+          ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 12),
         ...options.asMap().entries.map((entry) {
           int index = entry.key;
           String option = entry.value;
           bool isSelected = selectedValue == index;
           bool isCorrect = index == correctAnswer;
 
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: InkWell(
-              onTap: () => onChanged(index),
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
+          return GestureDetector(
+            onTap: () => onChanged(index),
+            child: Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: isSelected ? const Color(0xFFEFF6FF) : Colors.white,
+                border: Border.all(
                   color:
                       isSelected
-                          ? (isCorrect
-                              ? const Color(0xFFDCFCE7)
-                              : Colors.grey[100])
-                          : Colors.transparent,
-                  border: Border.all(
-                    color:
-                        isSelected
-                            ? (isCorrect
-                                ? const Color(0xFF10B981)
-                                : Colors.grey)
-                            : const Color(0xFFE5E7EB),
-                    width: 1,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
+                          ? const Color(0xFF2B5CE6)
+                          : const Color(0xFFE5E7EB),
+                  width: isSelected ? 2 : 1,
                 ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color:
-                              isSelected
-                                  ? (isCorrect
-                                      ? const Color(0xFF10B981)
-                                      : Colors.grey)
-                                  : const Color(0xFFE5E7EB),
-                          width: 2,
-                        ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
                         color:
                             isSelected
-                                ? (isCorrect
-                                    ? const Color(0xFF10B981)
-                                    : Colors.grey)
-                                : Colors.transparent,
+                                ? const Color(0xFF2B5CE6)
+                                : const Color(0xFFD1D5DB),
+                        width: 2,
                       ),
-                      child:
-                          isSelected
-                              ? const Icon(
-                                Icons.check,
-                                size: 14,
-                                color: Colors.white,
-                              )
-                              : null,
+                      color:
+                          isSelected ? const Color(0xFF2B5CE6) : Colors.white,
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        option,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color:
-                              isSelected
-                                  ? (isCorrect
-                                      ? const Color(0xFF10B981)
-                                      : Colors.black)
-                                  : const Color(0xFF6B7280),
-                          fontWeight:
-                              isSelected ? FontWeight.w500 : FontWeight.normal,
-                        ),
+                    child:
+                        isSelected
+                            ? const Icon(
+                              Icons.check,
+                              color: Colors.white,
+                              size: 12,
+                            )
+                            : null,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      option,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color:
+                            isSelected
+                                ? const Color(0xFF1A1A1A)
+                                : const Color(0xFF4B5563),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );
         }).toList(),
       ],
     );
+  }
+
+  bool _allQuestionsAnswered() {
+    return question1Answer != null &&
+        question2Answer != null &&
+        question3Answer != null;
+  }
+
+  void _submitAnswers() {
+    // Calculate score
+    int score = 0;
+    if (question1Answer == 2) score++;
+    if (question2Answer == 0) score++;
+    if (question3Answer == 3) score++;
+
+    // Handle submission logic here
+    print('Score: $score/3');
+
+    // Navigate to next screen or show results
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Quiz submitted! Score: $score/3'),
+        backgroundColor: const Color(0xFF10B981),
+      ),
+    );
+    Navigator.pop(context);
   }
 }

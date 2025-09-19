@@ -6,9 +6,9 @@ class Stage2Screen extends StatefulWidget {
 }
 
 class _Stage2ScreenState extends State<Stage2Screen> {
-  String? selectedQuestion1;
-  String? selectedQuestion2;
-  String? selectedQuestion3;
+  int? question1Answer;
+  int? question2Answer;
+  int? question3Answer;
 
   @override
   Widget build(BuildContext context) {
@@ -144,76 +144,106 @@ class _Stage2ScreenState extends State<Stage2Screen> {
             SizedBox(height: 40),
 
             // Questions Section
-            Text(
-              'Questions',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF111827),
-              ),
-            ),
-            SizedBox(height: 24),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Questions',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF1A1A1A),
+                  ),
+                ),
+                const SizedBox(height: 20),
 
-            // Question 1
-            _buildQuestion(
-              '1. Which Opex product is designed to help with compliance processes?',
-              ['OpexA', 'RegTech365', 'FormsAgora', 'PORA Solutions'],
-              selectedQuestion1,
-              (value) => setState(() => selectedQuestion1 = value),
-              correctAnswer: 'RegTech365',
-            ),
-            SizedBox(height: 24),
+                // Question 1
+                _buildQuestion(
+                  questionNumber: 1,
+                  question:
+                      'Which Opex product is designed to help with compliance processes?',
+                  options: [
+                    'OpexA',
+                    'RegTech365',
+                    'FormsAgora',
+                    'PORA Solutions',
+                  ],
+                  selectedValue: question1Answer,
+                  onChanged: (value) {
+                    setState(() {
+                      question1Answer = value;
+                    });
+                  },
+                  correctAnswer: 1,
+                ),
 
-            // Question 2
-            _buildQuestion(
-              '2. What does the FormsAgora platform offer to farmers?',
-              [
-                'Only livestock management tools.',
-                'A direct retail marketplace and customized loan options.',
-                'Specialized transportation services.',
-                'International export logistics.',
+                const SizedBox(height: 24),
+
+                // Question 2
+                _buildQuestion(
+                  questionNumber: 2,
+                  question:
+                      'What does the FormsAgora platform offer to farmers?',
+                  options: [
+                    'A direct retail marketplace and customized loan options.',
+                    'Only livestock management tools.',
+                    'Specialized transportation services.',
+                    'International export logistics.',
+                  ],
+                  selectedValue: question2Answer,
+                  onChanged: (value) {
+                    setState(() {
+                      question2Answer = value;
+                    });
+                  },
+                  correctAnswer: 0,
+                ),
+
+                const SizedBox(height: 24),
+
+                // Question 3
+                _buildQuestion(
+                  questionNumber: 3,
+                  question:
+                      'According to the provided content, what is OpexA used for?',
+                  options: [
+                    'Providing real-time compliance reporting.',
+                    'Managing agricultural businesses.',
+                    'Streamlining supply chain operations.',
+                    'Helping individuals navigate their career journey in IT.',
+                  ],
+                  selectedValue: question3Answer,
+                  onChanged: (value) {
+                    setState(() {
+                      question3Answer = value;
+                    });
+                  },
+                  correctAnswer: 3,
+                ),
               ],
-              selectedQuestion2,
-              (value) => setState(() => selectedQuestion2 = value),
-              correctAnswer:
-                  'A direct retail marketplace and customized loan options.',
-            ),
-            SizedBox(height: 24),
-
-            // Question 3
-            _buildQuestion(
-              '3. According to the provided content, what is OpexA used for?',
-              [
-                'Providing real-time compliance reporting.',
-                'Helping individuals navigate their career journey in IT.',
-                'Managing agricultural businesses.',
-                'Streamlining supply chain operations.',
-              ],
-              selectedQuestion3,
-              (value) => setState(() => selectedQuestion3 = value),
-              correctAnswer:
-                  'Helping individuals navigate their career journey in IT.',
             ),
             SizedBox(height: 40),
 
-            // Submit Button
-            Container(
+            SizedBox(
               width: double.infinity,
+              height: 48,
               child: ElevatedButton(
-                onPressed: () {
-                  // Handle submit action
-                  _handleSubmit();
-                  Navigator.pop(context);
-                },
+                onPressed:
+                    _allQuestionsAnswered()
+                        ? () {
+                          // Handle submit action
+                          _submitAnswers();
+                        }
+                        : null,
+
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF1E3A8A),
-                  padding: EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor: const Color(0xFF2B5CE6),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   elevation: 0,
                 ),
-                child: Text(
+                child: const Text(
                   'Submit & Continue',
                   style: TextStyle(
                     fontSize: 16,
@@ -230,126 +260,121 @@ class _Stage2ScreenState extends State<Stage2Screen> {
     );
   }
 
-  Widget _buildQuestion(
-    String question,
-    List<String> options,
-    String? selectedValue,
-    Function(String?) onChanged, {
-    String? correctAnswer,
+  Widget _buildQuestion({
+    required int questionNumber,
+    required String question,
+    required List<String> options,
+    required int? selectedValue,
+    required Function(int?) onChanged,
+    required int correctAnswer,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          question,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF111827),
+          '$questionNumber. $question',
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Color(0xFF1A1A1A),
             height: 1.4,
           ),
         ),
-        SizedBox(height: 16),
-        ...options
-            .map(
-              (option) => _buildRadioOption(
-                option,
-                selectedValue,
-                onChanged,
-                isCorrect: option == correctAnswer,
+        const SizedBox(height: 12),
+        ...options.asMap().entries.map((entry) {
+          int index = entry.key;
+          String option = entry.value;
+          bool isSelected = selectedValue == index;
+          bool isCorrect = index == correctAnswer;
+
+          return GestureDetector(
+            onTap: () => onChanged(index),
+            child: Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: isSelected ? const Color(0xFFEFF6FF) : Colors.white,
+                border: Border.all(
+                  color:
+                      isSelected
+                          ? const Color(0xFF2B5CE6)
+                          : const Color(0xFFE5E7EB),
+                  width: isSelected ? 2 : 1,
+                ),
+                borderRadius: BorderRadius.circular(8),
               ),
-            )
-            .toList(),
+              child: Row(
+                children: [
+                  Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color:
+                            isSelected
+                                ? const Color(0xFF2B5CE6)
+                                : const Color(0xFFD1D5DB),
+                        width: 2,
+                      ),
+                      color:
+                          isSelected ? const Color(0xFF2B5CE6) : Colors.white,
+                    ),
+                    child:
+                        isSelected
+                            ? const Icon(
+                              Icons.check,
+                              color: Colors.white,
+                              size: 12,
+                            )
+                            : null,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      option,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color:
+                            isSelected
+                                ? const Color(0xFF1A1A1A)
+                                : const Color(0xFF4B5563),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }).toList(),
       ],
     );
   }
 
-  Widget _buildRadioOption(
-    String option,
-    String? selectedValue,
-    Function(String?) onChanged, {
-    bool isCorrect = false,
-  }) {
-    bool isSelected = selectedValue == option;
-    bool showCorrectAnswer = selectedValue != null && isCorrect;
-
-    return Container(
-      margin: EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color:
-            showCorrectAnswer
-                ? Color(0xFFDCFCE7)
-                : (isSelected ? Color(0xFFF3F4F6) : Colors.white),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color:
-              showCorrectAnswer
-                  ? Color(0xFF10B981)
-                  : (isSelected ? Color(0xFF1E3A8A) : Color(0xFFE5E7EB)),
-          width: showCorrectAnswer ? 2 : 1,
-        ),
-      ),
-      child: RadioListTile<String>(
-        title: Text(
-          option,
-          style: TextStyle(
-            fontSize: 14,
-            color: Color(0xFF111827),
-            fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
-          ),
-        ),
-        value: option,
-        groupValue: selectedValue,
-        onChanged: onChanged,
-        activeColor: showCorrectAnswer ? Color(0xFF10B981) : Color(0xFF1E3A8A),
-        contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        controlAffinity: ListTileControlAffinity.trailing,
-        dense: true,
-      ),
-    );
+  bool _allQuestionsAnswered() {
+    return question1Answer != null &&
+        question2Answer != null &&
+        question3Answer != null;
   }
 
-  void _handleSubmit() {
-    // Check if all questions are answered
-    if (selectedQuestion1 == null ||
-        selectedQuestion2 == null ||
-        selectedQuestion3 == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Please answer all questions before submitting.'),
-          backgroundColor: Color(0xFFEF4444),
-        ),
-      );
-      return;
-    }
-
+  void _submitAnswers() {
     // Calculate score
     int score = 0;
-    if (selectedQuestion1 == 'RegTech365') score++;
-    if (selectedQuestion2 ==
-        'A direct retail marketplace and customized loan options.')
-      score++;
-    if (selectedQuestion3 ==
-        'Helping individuals navigate their career journey in IT.')
-      score++;
+    if (question1Answer == 1) score++;
+    if (question2Answer == 0) score++;
+    if (question3Answer == 3) score++;
 
-    // Show results
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text('Quiz Results'),
-            content: Text('You scored $score out of 3!'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  // Navigate to next screen or handle completion
-                },
-                child: Text('Continue'),
-              ),
-            ],
-          ),
+    // Handle submission logic here
+    print('Score: $score/3');
+
+    // Navigate to next screen or show results
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Quiz submitted! Score: $score/3'),
+        backgroundColor: const Color(0xFF10B981),
+      ),
     );
+    Navigator.pop(context);
   }
 }

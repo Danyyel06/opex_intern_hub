@@ -301,16 +301,11 @@ class _LeadershipStage3ScreenState extends State<LeadershipStage3Screen> {
               margin: const EdgeInsets.only(bottom: 8),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color:
-                    isSelected
-                        ? (isCorrect ? const Color(0xFFECFDF5) : Colors.white)
-                        : Colors.white,
+                color: isSelected ? const Color(0xFFEFF6FF) : Colors.white,
                 border: Border.all(
                   color:
                       isSelected
-                          ? (isCorrect
-                              ? const Color(0xFF10B981)
-                              : const Color(0xFF2B5CE6))
+                          ? const Color(0xFF2B5CE6)
                           : const Color(0xFFE5E7EB),
                   width: isSelected ? 2 : 1,
                 ),
@@ -326,18 +321,12 @@ class _LeadershipStage3ScreenState extends State<LeadershipStage3Screen> {
                       border: Border.all(
                         color:
                             isSelected
-                                ? (isCorrect
-                                    ? const Color(0xFF10B981)
-                                    : const Color(0xFF2B5CE6))
+                                ? const Color(0xFF2B5CE6)
                                 : const Color(0xFFD1D5DB),
                         width: 2,
                       ),
                       color:
-                          isSelected
-                              ? (isCorrect
-                                  ? const Color(0xFF10B981)
-                                  : const Color(0xFF2B5CE6))
-                              : Colors.white,
+                          isSelected ? const Color(0xFF2B5CE6) : Colors.white,
                     ),
                     child:
                         isSelected
@@ -356,9 +345,7 @@ class _LeadershipStage3ScreenState extends State<LeadershipStage3Screen> {
                         fontSize: 14,
                         color:
                             isSelected
-                                ? (isCorrect
-                                    ? const Color(0xFF047857)
-                                    : const Color(0xFF1A1A1A))
+                                ? const Color(0xFF1A1A1A)
                                 : const Color(0xFF4B5563),
                       ),
                     ),

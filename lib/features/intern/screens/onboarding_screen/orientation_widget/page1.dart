@@ -9,7 +9,9 @@ class OpexFoundationScreen extends StatefulWidget {
 
 class _OpexFoundationScreenState extends State<OpexFoundationScreen> {
   // Track selected answers for each question
-  Map<int, int> selectedAnswers = {};
+  int? question1Answer;
+  int? question2Answer;
+  int? question3Answer;
 
   @override
   Widget build(BuildContext context) {
@@ -162,83 +164,101 @@ class _OpexFoundationScreenState extends State<OpexFoundationScreen> {
             const SizedBox(height: 8),
 
             // Questions Section
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: const Text(
                     'Questions',
                     style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF111827),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF1A1A1A),
                     ),
                   ),
-                  const SizedBox(height: 24),
+                ),
+                const SizedBox(height: 20),
 
-                  // Question 1
-                  _buildQuestion(
-                    questionNumber: 1,
-                    question: 'What year was Opex Consulting established?',
-                    options: ['2011', '2015', '2010', '2020'],
-                    correctAnswer: 0,
-                  ),
+                // Question 1
+                _buildQuestion(
+                  questionNumber: 1,
+                  question: 'What year was Opex Consulting established??',
+                  options: ['2011', '2020', '2010', '2015'],
+                  selectedValue: question1Answer,
+                  onChanged: (value) {
+                    setState(() {
+                      question1Answer = value;
+                    });
+                  },
+                  correctAnswer: 0,
+                ),
 
-                  const SizedBox(height: 32),
+                const SizedBox(height: 24),
 
-                  // Question 2
-                  _buildQuestion(
-                    questionNumber: 2,
-                    question:
-                        'What is Opex Consulting committed to helping their clients and team members achieve?',
-                    options: [
-                      'Unparalleled brand recognition and global market share.',
-                      'Their goals with flawless execution and world-class expertise.',
-                      'The highest possible return on investment for every single project.',
-                      'Leadership in every industry through direct competition.',
-                    ],
-                    correctAnswer: 1,
-                  ),
+                // Question 2
+                _buildQuestion(
+                  questionNumber: 2,
+                  question:
+                      'What is Opex Consulting committed to helping their clients and team members achieve??',
+                  options: [
+                    'Unparalleled brand recognition and global market share.',
+                    'Their goals with flawless execution and world-class expertise.',
+                    'The highest possible return on investment for every single project.',
+                    'Leadership in every industry through direct competition.',
+                  ],
+                  selectedValue: question2Answer,
+                  onChanged: (value) {
+                    setState(() {
+                      question2Answer = value;
+                    });
+                  },
+                  correctAnswer: 1,
+                ),
 
-                  const SizedBox(height: 32),
+                const SizedBox(height: 24),
 
-                  // Question 3
-                  _buildQuestion(
-                    questionNumber: 3,
-                    question:
-                        'According to the provided text, what does Opex Consulting use to tackle complex business challenges?',
-                    options: [
-                      'Only traditional methods and frameworks.',
-                      'Innovative technology solutions and best-practice methodologies.',
-                      'Large-scale financial investments and market speculation.',
-                      'Outsourcing key projects to third-party firms.',
-                    ],
-                    correctAnswer: 1,
-                  ),
-                ],
-              ),
+                // Question 3
+                _buildQuestion(
+                  questionNumber: 3,
+                  question:
+                      'According to the provided text, what does Opex Consulting use to tackle complex business challenges?',
+                  options: [
+                    'Only traditional methods and frameworks.',
+                    'Large-scale financial investments and market speculation.',
+                    'Innovative technology solutions and best-practice methodologies.',
+                    'Outsourcing key projects to third-party firms.',
+                  ],
+                  selectedValue: question3Answer,
+                  onChanged: (value) {
+                    setState(() {
+                      question3Answer = value;
+                    });
+                  },
+                  correctAnswer: 2,
+                ),
+              ],
             ),
+            SizedBox(height: 10),
 
-            const SizedBox(height: 24),
-
-            // Submit Button
             Padding(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(18.0),
               child: SizedBox(
                 width: double.infinity,
-                height: 56,
+                height: 48,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Handle submit action
-                    Navigator.pop(context);
-                    _handleSubmit();
-                  },
+                  onPressed:
+                      _allQuestionsAnswered()
+                          ? () {
+                            // Handle submit action
+                            _submitAnswers();
+                          }
+                          : null,
+
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1E3A8A),
+                    backgroundColor: const Color(0xFF102592),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(8),
                     ),
                     elevation: 0,
                   ),
@@ -253,6 +273,7 @@ class _OpexFoundationScreenState extends State<OpexFoundationScreen> {
                 ),
               ),
             ),
+            SizedBox(height: 20),
           ],
         ),
       ),
@@ -263,53 +284,45 @@ class _OpexFoundationScreenState extends State<OpexFoundationScreen> {
     required int questionNumber,
     required String question,
     required List<String> options,
+    required int? selectedValue,
+    required Function(int?) onChanged,
     required int correctAnswer,
   }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '$questionNumber. $question',
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: Color(0xFF111827),
-            height: 1.4,
+    return Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '$questionNumber. $question',
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Color(0xFF1A1A1A),
+              height: 1.4,
+            ),
           ),
-        ),
-        const SizedBox(height: 16),
-        ...options.asMap().entries.map((entry) {
-          int index = entry.key;
-          String option = entry.value;
-          bool isSelected = selectedAnswers[questionNumber] == index;
-          bool isCorrect = index == correctAnswer;
+          const SizedBox(height: 12),
+          ...options.asMap().entries.map((entry) {
+            int index = entry.key;
+            String option = entry.value;
+            bool isSelected = selectedValue == index;
+            bool isCorrect = index == correctAnswer;
 
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  selectedAnswers[questionNumber] = index;
-                });
-              },
+            return GestureDetector(
+              onTap: () => onChanged(index),
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color:
-                      isSelected
-                          ? (isCorrect
-                              ? const Color(0xFFD1FAE5)
-                              : const Color(0xFFFEE2E2))
-                          : const Color(0xFFF9FAFB),
+                  color: isSelected ? const Color(0xFFEFF6FF) : Colors.white,
                   border: Border.all(
                     color:
                         isSelected
-                            ? (isCorrect
-                                ? const Color(0xFF10B981)
-                                : const Color(0xFFEF4444))
+                            ? const Color(0xFF2B5CE6)
                             : const Color(0xFFE5E7EB),
-                    width: 1.5,
+                    width: isSelected ? 2 : 1,
                   ),
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -323,25 +336,19 @@ class _OpexFoundationScreenState extends State<OpexFoundationScreen> {
                         border: Border.all(
                           color:
                               isSelected
-                                  ? (isCorrect
-                                      ? const Color(0xFF10B981)
-                                      : const Color(0xFFEF4444))
+                                  ? const Color(0xFF2B5CE6)
                                   : const Color(0xFFD1D5DB),
                           width: 2,
                         ),
                         color:
-                            isSelected
-                                ? (isCorrect
-                                    ? const Color(0xFF10B981)
-                                    : const Color(0xFFEF4444))
-                                : Colors.transparent,
+                            isSelected ? const Color(0xFF2B5CE6) : Colors.white,
                       ),
                       child:
                           isSelected
                               ? const Icon(
                                 Icons.check,
-                                size: 12,
                                 color: Colors.white,
+                                size: 12,
                               )
                               : null,
                     ),
@@ -353,38 +360,44 @@ class _OpexFoundationScreenState extends State<OpexFoundationScreen> {
                           fontSize: 14,
                           color:
                               isSelected
-                                  ? (isCorrect
-                                      ? const Color(0xFF047857)
-                                      : const Color(0xFFDC2626))
-                                  : const Color(0xFF374151),
-                          fontWeight: FontWeight.w500,
+                                  ? const Color(0xFF1A1A1A)
+                                  : const Color(0xFF4B5563),
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-          );
-        }).toList(),
-      ],
+            );
+          }).toList(),
+        ],
+      ),
     );
   }
 
-  void _handleSubmit() {
-    // Check if all questions are answered
-    if (selectedAnswers.length < 3) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please answer all questions before continuing.'),
-          backgroundColor: Color(0xFFEF4444),
-        ),
-      );
-      return;
-    }
+  bool _allQuestionsAnswered() {
+    return question1Answer != null &&
+        question2Answer != null &&
+        question3Answer != null;
+  }
 
-    // Handle submit logic here
-    print('Selected answers: $selectedAnswers');
+  void _submitAnswers() {
+    // Calculate score
+    int score = 0;
+    if (question1Answer == 0) score++;
+    if (question2Answer == 1) score++;
+    if (question3Answer == 2) score++;
+
+    // Handle submission logic here
+    print('Score: $score/3');
+
     // Navigate to next screen or show results
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Quiz submitted! Score: $score/3'),
+        backgroundColor: const Color(0xFF10B981),
+      ),
+    );
+    Navigator.pop(context);
   }
 }
