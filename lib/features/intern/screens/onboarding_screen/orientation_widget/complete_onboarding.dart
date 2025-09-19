@@ -67,7 +67,7 @@ class CongratulationsScreen extends StatelessWidget {
 
               // Subtitle Text
               const Text(
-                'Onboarding complete.',
+                'Onboarding in progress...',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -98,12 +98,14 @@ class CongratulationsScreen extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     // Handle button press
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => InternDashboard(),
-                      ),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => InternDashboard(),
+                    //   ),
+                    // );
+
+                    Navigator.popUntil(context, (route) => route.isFirst);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1E3A8A),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class Stage2Screen extends StatefulWidget {
+  const Stage2Screen({Key? key}) : super(key: key);
+
   @override
-  _Stage2ScreenState createState() => _Stage2ScreenState();
+  State<Stage2Screen> createState() => _Stage2ScreenState();
 }
 
 class _Stage2ScreenState extends State<Stage2Screen> {
@@ -18,224 +20,185 @@ class _Stage2ScreenState extends State<Stage2Screen> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
           Container(
-            margin: EdgeInsets.only(right: 16, top: 8, bottom: 8),
-            width: 32,
-            height: 32,
+            margin: const EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: Color(0xFF1E3A8A),
-              borderRadius: BorderRadius.circular(8),
+              color: const Color(0xFF1E3A8A),
+              borderRadius: BorderRadius.circular(6),
             ),
-            child: Center(
-              child: Text(
-                '2',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+            child: const Text(
+              '2',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
         ],
+        centerTitle: false,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header Image
-            Container(
-              width: double.infinity,
-              height: 300,
-              decoration: BoxDecoration(
-                border: Border.all(color: Color(0xFF1E3A8A), width: 2),
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(18),
-                child: Image.asset(
-                  'images/Problem Solving 5.png',
-                  fit: BoxFit.cover,
-                  width: 350,
-                  height: 350,
+            Center(
+              child: Container(
+                width: double.infinity,
+                height: 300,
+                decoration: BoxDecoration(
+                  border: Border.all(color: const Color(0xFF1E3A8A), width: 2),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(18),
+                  child: Image.asset(
+                    'images/Problem Solving 5.png',
+                    fit: BoxFit.cover,
+                    width: 350,
+                    height: 350,
+                  ),
                 ),
               ),
             ),
-            SizedBox(height: 24),
-
-            // Stage 2 Title
-            Text(
+            const SizedBox(height: 30),
+            const Text(
               'STAGE 2',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF6B7280),
+                color: Colors.grey,
                 letterSpacing: 1.2,
               ),
             ),
-            SizedBox(height: 8),
-
-            // Main Title
-            Text(
-              'Our Services &\nSolutions',
+            const SizedBox(height: 8),
+            const Text(
+              'Our Services & Solutions',
               style: TextStyle(
-                fontSize: 28,
+                fontSize: 32,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF111827),
-                height: 1.2,
+                color: Colors.black,
+                height: 1.1,
               ),
             ),
-            SizedBox(height: 16),
-
-            // Description
-            Text(
-              'This module provides an overview of the key products and solutions that set Opex Consulting apart. We draw on industry expertise to make companies more competitive by offering innovative solutions. Our comprehensive product catalog is designed to help a diverse range of clients, from major corporations to individual professionals.',
+            const SizedBox(height: 20),
+            const Text(
+              'This module provides an overview of the key products and solutions that set Opex Consulting apart. We draw on industry expertise to make companies more competitive by offering innovative solutions that tackle real-world problems. Our product portfolio is designed to help a diverse range of clients, from major corporations to individual professionals.',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 color: Color(0xFF6B7280),
                 height: 1.5,
               ),
             ),
-            SizedBox(height: 32),
-
-            // Our Core Offerings Section
-            Text(
+            const SizedBox(height: 30),
+            const Text(
               'Our Core Offerings',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF111827),
+                color: Colors.black,
               ),
             ),
-            SizedBox(height: 12),
-            Text(
-              'A comprehensive offering like RegTech365, a platform that helps businesses regulate their compliance processes from a single location. It provides real-time monitoring, automated reporting, and predictive analytics to ensure adherence to regulations. We also have FormsAgora, a state-of-the-art agricultural platform aimed at transforming the industry by providing cutting-edge solutions for the marketplace, customized loans, and comprehensive coverage of the agricultural value chain.',
+            const SizedBox(height: 12),
+            const Text(
+              'Among our core offerings is RegTech365, a platform that helps businesses regulate their compliance processes from a single location. It provides real-time monitoring, automated reporting, and predictive analytics to ensure adherence to regulations. We also have FarmsAgora, a state-of-the-art agricultural platform aimed at transforming the industry by offering farmers a direct retail marketplace, customized loans, and comprehensive coverage of the agricultural value chain.',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 color: Color(0xFF6B7280),
                 height: 1.5,
               ),
             ),
-            SizedBox(height: 32),
-
-            // Innovation and Impact Section
-            Text(
+            const SizedBox(height: 30),
+            const Text(
               'Innovation and Impact',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF111827),
+                color: Colors.black,
               ),
             ),
-            SizedBox(height: 12),
-            Text(
-              'Finally, we offer OpexA, a solution designed to help individuals navigate their career journey with personalized guidance needed to discover their passion, learn new skills, and thrive in the exciting world of IT. Each of our products is a testament to our commitment to innovation and leveraging technology for maximum impact.',
+            const SizedBox(height: 12),
+            const Text(
+              'Finally, we offer OpexA, a solution designed to help individuals navigate their career journeys in ICT. It provides the tools and guidance needed to discover your passion, learn new skills, and thrive in the exciting world of IT. Each of our products is a testament to our commitment to innovation and leveraging technology for maximum impact.',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 color: Color(0xFF6B7280),
                 height: 1.5,
               ),
             ),
-            SizedBox(height: 40),
 
-            // Questions Section
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Questions',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF1A1A1A),
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                // Question 1
-                _buildQuestion(
-                  questionNumber: 1,
-                  question:
-                      'Which Opex product is designed to help with compliance processes?',
-                  options: [
-                    'OpexA',
-                    'RegTech365',
-                    'FormsAgora',
-                    'PORA Solutions',
-                  ],
-                  selectedValue: question1Answer,
-                  onChanged: (value) {
-                    setState(() {
-                      question1Answer = value;
-                    });
-                  },
-                  correctAnswer: 1,
-                ),
-
-                const SizedBox(height: 24),
-
-                // Question 2
-                _buildQuestion(
-                  questionNumber: 2,
-                  question:
-                      'What does the FormsAgora platform offer to farmers?',
-                  options: [
-                    'A direct retail marketplace and customized loan options.',
-                    'Only livestock management tools.',
-                    'Specialized transportation services.',
-                    'International export logistics.',
-                  ],
-                  selectedValue: question2Answer,
-                  onChanged: (value) {
-                    setState(() {
-                      question2Answer = value;
-                    });
-                  },
-                  correctAnswer: 0,
-                ),
-
-                const SizedBox(height: 24),
-
-                // Question 3
-                _buildQuestion(
-                  questionNumber: 3,
-                  question:
-                      'According to the provided content, what is OpexA used for?',
-                  options: [
-                    'Providing real-time compliance reporting.',
-                    'Managing agricultural businesses.',
-                    'Streamlining supply chain operations.',
-                    'Helping individuals navigate their career journey in IT.',
-                  ],
-                  selectedValue: question3Answer,
-                  onChanged: (value) {
-                    setState(() {
-                      question3Answer = value;
-                    });
-                  },
-                  correctAnswer: 3,
-                ),
-              ],
+            const SizedBox(height: 18),
+            const Text(
+              'Questions',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF1A1A1A),
+              ),
             ),
-            SizedBox(height: 40),
-
+            const SizedBox(height: 20),
+            _buildQuestion(
+              questionNumber: 1,
+              question:
+                  'Which Opex product is designed to help with compliance processes?',
+              options: ['OpexA', 'RegTech365', 'FormsAgora', 'PORA Solutions'],
+              selectedValue: question1Answer,
+              onChanged: (value) {
+                setState(() {
+                  question1Answer = value;
+                });
+              },
+              correctAnswer: 1,
+            ),
+            const SizedBox(height: 24),
+            _buildQuestion(
+              questionNumber: 2,
+              question: 'What does the FormsAgora platform offer to farmers?',
+              options: [
+                'Only livestock management tools.',
+                'A direct retail marketplace and customized loan options.',
+                'Specialized transportation services.',
+                'International export logistics.',
+              ],
+              selectedValue: question2Answer,
+              onChanged: (value) {
+                setState(() {
+                  question2Answer = value;
+                });
+              },
+              correctAnswer: 1,
+            ),
+            const SizedBox(height: 24),
+            _buildQuestion(
+              questionNumber: 3,
+              question:
+                  'According to the provided content, what is OpexA used for?',
+              options: [
+                'Providing real-time compliance reporting.',
+                'Helping individuals navigate their career journey in IT.',
+                'Managing agricultural businesses.',
+                'Streamlining supply chain operations.',
+              ],
+              selectedValue: question3Answer,
+              onChanged: (value) {
+                setState(() {
+                  question3Answer = value;
+                });
+              },
+              correctAnswer: 1,
+            ),
+            const SizedBox(height: 40),
             SizedBox(
               width: double.infinity,
               height: 48,
               child: ElevatedButton(
-                onPressed:
-                    _allQuestionsAnswered()
-                        ? () {
-                          // Handle submit action
-                          _submitAnswers();
-                        }
-                        : null,
-
+                onPressed: _allQuestionsAnswered() ? _submitAnswers : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF2B5CE6),
                   shape: RoundedRectangleBorder(
@@ -253,7 +216,7 @@ class _Stage2ScreenState extends State<Stage2Screen> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -285,7 +248,6 @@ class _Stage2ScreenState extends State<Stage2Screen> {
           int index = entry.key;
           String option = entry.value;
           bool isSelected = selectedValue == index;
-          bool isCorrect = index == correctAnswer;
 
           return GestureDetector(
             onTap: () => onChanged(index),
@@ -359,22 +321,22 @@ class _Stage2ScreenState extends State<Stage2Screen> {
   }
 
   void _submitAnswers() {
-    // Calculate score
     int score = 0;
     if (question1Answer == 1) score++;
-    if (question2Answer == 0) score++;
-    if (question3Answer == 3) score++;
+    if (question2Answer == 1) score++;
+    if (question3Answer == 1) score++;
 
-    // Handle submission logic here
-    print('Score: $score/3');
+    bool quizPassed = score == 3;
 
-    // Navigate to next screen or show results
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Quiz submitted! Score: $score/3'),
-        backgroundColor: const Color(0xFF10B981),
-      ),
-    );
-    Navigator.pop(context);
+    if (quizPassed) {
+      Navigator.pop(context, true);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Incorrect answers. Please try again!'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 }

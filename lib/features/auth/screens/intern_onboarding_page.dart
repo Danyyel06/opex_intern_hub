@@ -286,9 +286,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   print('Complete Profile pressed');
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => OnboardingJourney(),
-                    ),
+                    MaterialPageRoute(builder: (context) => OnboardingHome()),
                   );
                 },
                 style: ElevatedButton.styleFrom(

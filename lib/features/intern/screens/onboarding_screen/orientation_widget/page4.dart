@@ -20,7 +20,7 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
@@ -48,19 +48,13 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Hero Image
             Center(
               child: Container(
                 width: double.infinity,
                 height: 300,
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Color(0xFF1E3A8A), // Deep blue border
-                    width: 2,
-                  ),
-                  borderRadius: BorderRadius.circular(
-                    24,
-                  ), // Rectangular with rounded corners
+                  border: Border.all(color: const Color(0xFF1E3A8A), width: 2),
+                  borderRadius: BorderRadius.circular(24),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(18),
@@ -73,10 +67,7 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
                 ),
               ),
             ),
-
             const SizedBox(height: 30),
-
-            // Stage 4 Text
             const Text(
               'STAGE 4',
               style: TextStyle(
@@ -86,10 +77,7 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
                 letterSpacing: 1.2,
               ),
             ),
-
             const SizedBox(height: 8),
-
-            // Title
             const Text(
               'Our\nPartners',
               style: TextStyle(
@@ -99,10 +87,7 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
                 height: 1.1,
               ),
             ),
-
             const SizedBox(height: 20),
-
-            // Description
             const Text(
               'This module introduces you to the strategic partnerships that are essential to Opex Consulting\'s mission. We are committed to a collaborative approach, and our success is deeply intertwined with the visionaries and leading firms we partner with. These partnerships are a key pillar of our business strategy and help us to shape the future of financial services and guide our clients to new heights.',
               style: TextStyle(
@@ -111,10 +96,7 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
                 height: 1.5,
               ),
             ),
-
             const SizedBox(height: 30),
-
-            // A Network of Expertise Section
             const Text(
               'A Network of Expertise',
               style: TextStyle(
@@ -123,9 +105,7 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
                 color: Colors.black,
               ),
             ),
-
             const SizedBox(height: 12),
-
             const Text(
               'Our partners provide us with specialized expertise and a broader network, enabling us to deliver comprehensive, world-class solutions. These relationships are built on a shared commitment to innovation and excellence, ensuring we can tackle complex business challenges with the best resources available. By working together, we can provide seamless, integrated services that deliver exceptional results to our clients.',
               style: TextStyle(
@@ -134,10 +114,7 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
                 height: 1.5,
               ),
             ),
-
             const SizedBox(height: 30),
-
-            // Understanding our Collaborations Section
             const Text(
               'Understanding our Collaborations',
               style: TextStyle(
@@ -146,9 +123,7 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
                 color: Colors.black,
               ),
             ),
-
             const SizedBox(height: 12),
-
             const Text(
               'This network is a vital part of our journey. As an intern, you will see how these collaborations contribute to our success and help us remain at the forefront of the industry. Understanding the strength and purpose of our partnerships is crucial to your role at Opex.',
               style: TextStyle(
@@ -157,10 +132,7 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
                 height: 1.5,
               ),
             ),
-
             const SizedBox(height: 40),
-
-            // Questions Section
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -173,8 +145,6 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-
-                // Question 1
                 _buildQuestion(
                   questionNumber: 1,
                   question:
@@ -193,10 +163,7 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
                   },
                   correctAnswer: 2,
                 ),
-
                 const SizedBox(height: 24),
-
-                // Question 2
                 _buildQuestion(
                   questionNumber: 2,
                   question:
@@ -215,10 +182,7 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
                   },
                   correctAnswer: 0,
                 ),
-
                 const SizedBox(height: 24),
-
-                // Question 3
                 _buildQuestion(
                   questionNumber: 3,
                   question:
@@ -240,18 +204,11 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
               ],
             ),
             const SizedBox(height: 40),
-
             SizedBox(
               width: double.infinity,
               height: 48,
               child: ElevatedButton(
-                onPressed:
-                    _allQuestionsAnswered()
-                        ? () {
-                          // Handle submit action
-                          _submitAnswers();
-                        }
-                        : null,
+                onPressed: _allQuestionsAnswered() ? _submitAnswers : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF2B5CE6),
                   shape: RoundedRectangleBorder(
@@ -301,7 +258,6 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
           int index = entry.key;
           String option = entry.value;
           bool isSelected = selectedValue == index;
-          bool isCorrect = index == correctAnswer;
 
           return GestureDetector(
             onTap: () => onChanged(index),
@@ -375,22 +331,22 @@ class _Stage4PartnersScreenState extends State<Stage4PartnersScreen> {
   }
 
   void _submitAnswers() {
-    // Calculate score
     int score = 0;
     if (question1Answer == 2) score++;
     if (question2Answer == 0) score++;
     if (question3Answer == 3) score++;
 
-    // Handle submission logic here
-    print('Score: $score/3');
+    bool quizPassed = score == 3;
 
-    // Navigate to next screen or show results
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Quiz submitted! Score: $score/3'),
-        backgroundColor: const Color(0xFF10B981),
-      ),
-    );
-    Navigator.pop(context);
+    if (quizPassed) {
+      Navigator.pop(context, true);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Incorrect answers. Please try again!'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 }

@@ -1,253 +1,212 @@
 import 'package:flutter/material.dart';
+import 'package:opex_intern_hub/features/intern/screens/onboarding_screen/orientation_widget/complete_onboarding.dart';
 import 'package:opex_intern_hub/features/intern/screens/onboarding_screen/orientation_widget/page1.dart';
 import 'package:opex_intern_hub/features/intern/screens/onboarding_screen/orientation_widget/page2.dart';
 import 'package:opex_intern_hub/features/intern/screens/onboarding_screen/orientation_widget/page3.dart';
 import 'package:opex_intern_hub/features/intern/screens/onboarding_screen/orientation_widget/page4.dart';
 import 'package:opex_intern_hub/features/intern/screens/onboarding_screen/orientation_widget/page5.dart';
 
-class OnboardingJourney extends StatelessWidget {
-  const OnboardingJourney({Key? key}) : super(key: key);
+class OnboardingHome extends StatefulWidget {
+  const OnboardingHome({super.key});
+
+  @override
+  State<OnboardingHome> createState() => _OnboardingHomeState();
+}
+
+class _OnboardingHomeState extends State<OnboardingHome> {
+  int currentStage = 1;
+  List<bool> isStageCompleted = List.generate(5, (_) => false);
+  double progress = 0.0;
+
+  void _navigateToStage(int stageNumber, Widget destination) async {
+    if (stageNumber <= currentStage) {
+      final bool? result = await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => destination),
+      );
+
+      if (result != null && result) {
+        setState(() {
+          isStageCompleted[stageNumber - 1] = true;
+          if (stageNumber < 5) {
+            currentStage = stageNumber + 1;
+          }
+          progress = (stageNumber) / 5;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
-
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 70.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 40),
-            // Title
-            const Text(
-              'Onboarding\nJourney',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF1E3A8A),
-                height: 1.2,
-              ),
-            ),
-            const SizedBox(height: 32),
-            // Progress bar
-            Container(
-              width: double.infinity,
-              child: Stack(
-                children: [
-                  // Background (gray) bar
-                  Container(
-                    height: 8,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      color: const Color(0xFFE5E7EB),
-                    ),
-                  ),
-                  // Foreground (blue) progress
-                  FractionallySizedBox(
-                    alignment: Alignment.centerLeft,
-                    widthFactor: 0.6, // 60% progress
-                    child: Container(
-                      height: 8,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        color: const Color(0xFF1E3A8A),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              '60% Complete',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: Color(0xFF6B7280),
-              ),
-            ),
-            const SizedBox(height: 40),
-            // Onboarding modules
-            Expanded(
-              child: ListView(
-                children: [
-                  _buildOnboardingItem(
-                    number: '1',
-                    title: 'Opex Foundation',
-                    description:
-                        'This module introduces interns to the\ncompany\'s core mission and history',
-                    backgroundColor: const Color(0xFF16A34A),
-                    isCompleted: true,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => OpexFoundationScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  _buildOnboardingItem(
-                    number: '2',
-                    title: 'Services and Solutions',
-                    description:
-                        'This module covers Opex\'s products,\nservices, and industries.',
-                    backgroundColor: const Color(0xFF16A34A),
-                    isCompleted: true,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Stage2Screen()),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  _buildOnboardingItem(
-                    number: '3',
-                    title: 'Our Leadership',
-                    description:
-                        'This module introduces the key leaders\nwho drive the company\'s success.',
-                    backgroundColor: const Color(0xFF3B82F6),
-                    isCompleted: false,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LeadershipStage3Screen(),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  _buildOnboardingItem(
-                    number: '4',
-                    title: 'Our Partners',
-                    description:
-                        'Interns learn about the strategic\npartners who collaborate with Opex.',
-                    backgroundColor: const Color(0xFF9CA3AF),
-                    isCompleted: false,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Stage4PartnersScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  _buildOnboardingItem(
-                    number: '5',
-                    title: 'Your Desired Path',
-                    description:
-                        'This module helps interns define their\npath and interests.',
-                    backgroundColor: const Color(0xFF9CA3AF),
-                    isCompleted: false,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => OnboardingStage5(),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 24),
-                ],
-              ),
-            ),
-          ],
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: true,
+        title: const Text(
+          'Intern Onboarding',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF1E3A8A),
+          ),
         ),
+      ),
+      body: Column(
+        children: [
+          LinearProgressIndicator(
+            value: progress,
+            backgroundColor: Colors.grey[300],
+            color: const Color(0xFF1E3A8A),
+            minHeight: 8,
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Welcome, Intern!',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Your journey to becoming a full-fledged Opex team member starts here. Complete these stages to get oriented with our company culture, values, and vision.',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF6B7280),
+                      height: 1.5,
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  _buildStageCard(
+                    stageNumber: 1,
+                    title: 'The Opex Foundation',
+                    imagePath: 'images/Step One 1.png',
+                    onTap: () => _navigateToStage(1, OpexFoundationScreen()),
+                  ),
+                  _buildStageCard(
+                    stageNumber: 2,
+                    title: 'Our Services & Solutions',
+                    imagePath: 'images/Problem Solving 5.png',
+                    onTap: () => _navigateToStage(2, Stage2Screen()),
+                  ),
+                  _buildStageCard(
+                    stageNumber: 3,
+                    title: 'Our Leadership',
+                    imagePath: 'images/Leadership 2 (1).png',
+                    onTap: () => _navigateToStage(3, LeadershipStage3Screen()),
+                  ),
+                  _buildStageCard(
+                    stageNumber: 4,
+                    title: 'Our Partners',
+                    imagePath: 'images/Handshake.png',
+                    onTap:
+                        () => _navigateToStage(4, const Stage4PartnersScreen()),
+                  ),
+                  _buildStageCard(
+                    stageNumber: 5,
+                    title: 'Your Desired Path',
+                    imagePath: 'images/Progress.png',
+                    onTap: () => _navigateToStage(5, OnboardingStage5()),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildOnboardingItem({
-    required String number,
+  Widget _buildStageCard({
+    required int stageNumber,
     required String title,
-    required String description,
-    required Color backgroundColor,
-    required bool isCompleted,
-    required VoidCallback? onTap,
+    required String imagePath,
+    required VoidCallback onTap,
   }) {
+    bool isCompleted = isStageCompleted[stageNumber - 1];
+    bool isCurrent = currentStage == stageNumber;
+    bool isLocked = currentStage < stageNumber;
+
+    Color cardColor;
+    Color borderColor;
+    Color textColor;
+    IconData icon;
+
+    if (isCompleted) {
+      cardColor = const Color(0xFFE8F5E9);
+      borderColor = const Color(0xFF107C41);
+      textColor = const Color(0xFF107C41);
+      icon = Icons.check_circle;
+    } else if (isCurrent) {
+      cardColor = const Color(0xFFEFF6FF);
+      borderColor = const Color(0xFF2B5CE6);
+      textColor = const Color(0xFF2B5CE6);
+      icon = Icons.play_circle_fill;
+    } else {
+      cardColor = Colors.white;
+      borderColor = const Color(0xFFE5E7EB);
+      textColor = const Color(0xFF4B5563);
+      icon = Icons.lock;
+    }
+
     return GestureDetector(
-      onTap: onTap,
+      onTap: isLocked ? null : onTap,
       child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.only(bottom: 16),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: cardColor,
           borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          border: Border.all(color: borderColor, width: 2),
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Number circle
-            Column(
-              children: [
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: backgroundColor,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Center(
-                    child: Text(
-                      number,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: isLocked ? Colors.grey[300] : Colors.transparent,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Image.asset(imagePath, fit: BoxFit.contain),
             ),
             const SizedBox(width: 16),
-            // Content
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color:
-                            isCompleted
-                                ? const Color(0xFF16A34A)
-                                : backgroundColor == const Color(0xFF3B82F6)
-                                ? const Color(0xFF3B82F6)
-                                : const Color(0xFF9CA3AF),
-                      ),
+                  Text(
+                    'STAGE $stageNumber',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: textColor,
+                      letterSpacing: 0.5,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    description,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: Color(0xFF6B7280),
-                      height: 1.4,
+                    title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: textColor,
                     ),
                   ),
                 ],
               ),
             ),
+            Icon(icon, color: textColor, size: 24),
           ],
         ),
       ),

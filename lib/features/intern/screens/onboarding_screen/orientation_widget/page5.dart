@@ -17,7 +17,7 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
@@ -46,25 +46,21 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-
-              // Hero Image
               Center(
                 child: Container(
                   width: double.infinity,
                   height: 300,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Color(0xFF1E3A8A), // Deep blue border
+                      color: const Color(0xFF1E3A8A),
                       width: 3,
                     ),
-                    borderRadius: BorderRadius.circular(
-                      24,
-                    ), // Rectangular with rounded corners
+                    borderRadius: BorderRadius.circular(24),
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(18),
                     child: Image.asset(
-                      'images/Progress.png', // Placeholder - replace with your image
+                      'images/Progress.png',
                       fit: BoxFit.cover,
                       width: 350,
                       height: 350,
@@ -72,10 +68,7 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 32),
-
-              // Stage Label
               const Text(
                 'STAGE 5',
                 style: TextStyle(
@@ -85,10 +78,7 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
                   letterSpacing: 0.5,
                 ),
               ),
-
               const SizedBox(height: 8),
-
-              // Title
               const Text(
                 'Your Desired\nPath',
                 style: TextStyle(
@@ -98,10 +88,7 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
                   height: 1.2,
                 ),
               ),
-
               const SizedBox(height: 16),
-
-              // Description
               const Text(
                 'Congratulations on reaching the final stage of your onboarding journey!',
                 style: TextStyle(
@@ -110,9 +97,7 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
                   height: 1.5,
                 ),
               ),
-
               const SizedBox(height: 16),
-
               const Text(
                 'This module is your opportunity to define the path you\'d like to take at Opex Consulting. Your selection will help us understand your professional interests and align you with projects and mentors that will be most fulfilling for you.',
                 style: TextStyle(
@@ -121,9 +106,7 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
                   height: 1.5,
                 ),
               ),
-
               const SizedBox(height: 16),
-
               const Text(
                 'This is a crucial step in shaping your internship experience and setting you up for success. Please take a moment to review the available roles and select the one that best matches your passion and career goals.',
                 style: TextStyle(
@@ -132,12 +115,9 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
                   height: 1.5,
                 ),
               ),
-
               const SizedBox(height: 32),
-
-              // Role Selection Grid
               SizedBox(
-                height: 400, // Adjust as needed to fit the grid
+                height: 400,
                 child: GridView.count(
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
@@ -162,10 +142,7 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
                   ],
                 ),
               ),
-
               const SizedBox(height: 24),
-
-              // Complete Button
               SizedBox(
                 width: double.infinity,
                 height: 56,
@@ -173,13 +150,14 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
                   onPressed:
                       selectedPath != null
                           ? () {
+                            Navigator.pop(context, true);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => CongratulationsScreen(),
+                                builder:
+                                    (context) => const CongratulationsScreen(),
                               ),
                             );
-                            print('Selected path: $selectedPath');
                           }
                           : null,
                   style: ElevatedButton.styleFrom(
@@ -200,7 +178,6 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 32),
             ],
           ),
@@ -240,7 +217,7 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-              child: Container(
+              child: SizedBox(
                 width: double.infinity,
                 child: Image.asset(imagePath, fit: BoxFit.contain),
               ),
