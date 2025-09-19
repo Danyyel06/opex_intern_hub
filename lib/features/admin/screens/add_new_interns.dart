@@ -15,9 +15,9 @@ class _OnboardInternWidgetState extends State<OnboardInternWidget> {
   @override
   void initState() {
     super.initState();
-    // Pre-populate the fields as shown in the design
-    _nameController.text = 'Olunupe Kolade Emmanuel';
-    _emailController.text = 'koladeemma21@gmail.com';
+    // Remove pre-populated text for hint text usage
+    // _nameController.text = 'Olunupe Kolade Emmanuel';
+    // _emailController.text = 'koladeemma21@gmail.com';
   }
 
   @override
@@ -122,7 +122,7 @@ class _OnboardInternWidgetState extends State<OnboardInternWidget> {
                         fontWeight: FontWeight.w400,
                       ),
                       decoration: const InputDecoration(
-                        hintText: 'Enter intern name',
+                        hintText: 'Olunupe Kolade Emmanuel',
                         hintStyle: TextStyle(
                           color: Color(0xFF9CA3AF),
                           fontWeight: FontWeight.w400,
@@ -197,7 +197,7 @@ class _OnboardInternWidgetState extends State<OnboardInternWidget> {
                         fontWeight: FontWeight.w400,
                       ),
                       decoration: const InputDecoration(
-                        hintText: 'Enter email address',
+                        hintText: 'koladeemma21@gmail.com',
                         hintStyle: TextStyle(
                           color: Color(0xFF9CA3AF),
                           fontWeight: FontWeight.w400,

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:opex_intern_hub/features/supervisors/screens/task_creation.dart';
+import 'package:opex_intern_hub/features/supervisors/screens/task_editing.dart';
 import 'package:opex_intern_hub/features/supervisors/screens/supervisors_dashboard.dart';
 import 'package:opex_intern_hub/features/supervisors/screens/supervisors_profile.dart';
+import 'package:opex_intern_hub/features/supervisors/screens/task_creation.dart';
 
 class TaskManagerScreen extends StatefulWidget {
   const TaskManagerScreen({Key? key}) : super(key: key);
@@ -66,7 +67,7 @@ class _TaskManagerScreenState extends State<TaskManagerScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CreateTaskScreen(),
+                            builder: (context) => TaskEditing(),
                           ),
                         );
                       },
@@ -94,10 +95,15 @@ class _TaskManagerScreenState extends State<TaskManagerScreen> {
                       margin: const EdgeInsets.only(bottom: 24),
                       child: ElevatedButton(
                         onPressed: () {
-                          // Add task functionality
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CreateTaskScreen(),
+                            ),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF2B4BC7),
+                          backgroundColor: const Color(0xFF1E3A8A),
                           foregroundColor: Colors.white,
                           elevation: 0,
                           shape: RoundedRectangleBorder(
@@ -188,7 +194,7 @@ class _TaskManagerScreenState extends State<TaskManagerScreen> {
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF2B4BC7),
+                      color: const Color(0xFF1E3A8A),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: const Text(
@@ -224,7 +230,7 @@ Widget _buildNavItem(IconData icon, String label, bool isActive) {
     children: [
       Icon(
         icon,
-        color: isActive ? const Color(0xFF4F46E5) : const Color(0xFF9CA3AF),
+        color: isActive ? const Color(0xFF1E3A8A) : const Color(0xFF9CA3AF),
         size: 24,
       ),
       const SizedBox(height: 4),
@@ -233,7 +239,7 @@ Widget _buildNavItem(IconData icon, String label, bool isActive) {
         style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w500,
-          color: isActive ? const Color(0xFF4F46E5) : const Color(0xFF9CA3AF),
+          color: isActive ? const Color(0xFF1E3A8A) : const Color(0xFF9CA3AF),
         ),
       ),
     ],

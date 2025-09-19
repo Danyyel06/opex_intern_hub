@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:opex_intern_hub/features/admin/widgets/congrats.dart';
+import 'package:opex_intern_hub/features/admin/screens/supervisor_assignment.dart';
 
 class SupervisorAssignmentScreen extends StatelessWidget {
   const SupervisorAssignmentScreen({Key? key}) : super(key: key);
@@ -117,7 +117,7 @@ class SupervisorAssignmentScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SupervisorAssignedScreen(),
+                          builder: (context) => SupervisorAssignmentPage(),
                         ),
                       );
                     },

@@ -88,9 +88,9 @@ class AdminDashboard extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
 
-              // Action Cards Row
+              // Interns Directory
+              const SizedBox(height: 20),
               Row(
                 children: [
                   // Add new Intern Card
@@ -210,9 +210,7 @@ class AdminDashboard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
-
-              // Interns Directory
+              const SizedBox(height: 10),
               const Text(
                 'Interns Directory',
                 style: TextStyle(
@@ -226,6 +224,7 @@ class AdminDashboard extends StatelessWidget {
               // Interns List
               Expanded(
                 child: Container(
+                  height: 600,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
@@ -269,7 +268,7 @@ class AdminDashboard extends StatelessWidget {
                         ),
                         InternListItem(
                           name: 'Jason Momoa',
-                          role: 'Creating a User Flow',
+                          role: 'Front-End Engineer',
                           imageAsset: 'assets/images/jason_m.png',
                         ),
                       ],

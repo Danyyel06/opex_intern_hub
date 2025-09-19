@@ -63,7 +63,7 @@ class _SupervisorDashboardState extends State<SupervisorDashboard> {
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF2E5BFF),
+                          color: Color(0xFF1E3A8A),
                         ),
                       ),
                     ],
@@ -77,7 +77,7 @@ class _SupervisorDashboardState extends State<SupervisorDashboard> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF2E47B8),
+                  color: const Color(0xFF1E3A8A),
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: Row(
@@ -302,7 +302,7 @@ Widget _buildNavItem(IconData icon, String label, bool isActive) {
     children: [
       Icon(
         icon,
-        color: isActive ? const Color(0xFF4F46E5) : const Color(0xFF9CA3AF),
+        color: isActive ? const Color(0xFF1E3A8A) : const Color(0xFF9CA3AF),
         size: 24,
       ),
       const SizedBox(height: 4),
@@ -311,7 +311,7 @@ Widget _buildNavItem(IconData icon, String label, bool isActive) {
         style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w500,
-          color: isActive ? const Color(0xFF4F46E5) : const Color(0xFF9CA3AF),
+          color: isActive ? const Color(0xFF1E3A8A) : const Color(0xFF9CA3AF),
         ),
       ),
     ],
