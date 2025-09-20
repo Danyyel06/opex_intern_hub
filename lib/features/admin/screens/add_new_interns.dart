@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:opex_intern_hub/features/admin/screens/admin_dashboard.dart';
 import 'package:opex_intern_hub/features/admin/widgets/congrats.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class OnboardInternWidget extends StatefulWidget {
   const OnboardInternWidget({Key? key}) : super(key: key);
@@ -11,6 +13,65 @@ class OnboardInternWidget extends StatefulWidget {
 class _OnboardInternWidgetState extends State<OnboardInternWidget> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  bool _isLoading = false;
+
+  Future<void> _createIntern() async {
+    // Generate a temporary password. For simplicity, you can use a fixed one for testing.
+    final temporaryPassword = 'temp_password_123';
+
+    setState(() {
+      _isLoading = true; // Set a loading state
+    });
+
+    try {
+      // Step 1: Create the user account in Supabase Authentication
+      // This method is for admin-level user creation.
+      final UserResponse res = await Supabase.instance.client.auth.admin
+          .createUser(
+            {
+                  'email': _emailController.text.trim(),
+                  'password': temporaryPassword,
+                }
+                as AdminUserAttributes,
+          );
+
+      final newUser = res.user;
+
+      if (newUser != null) {
+        // Step 2: Insert the user's profile into the 'interns' table
+        await Supabase.instance.client.from('interns').insert({
+          'intern_id': newUser.id, // Link to the Supabase user ID
+          'full_name': _nameController.text.trim(),
+          'is_onboarded': false, // Set to false for the onboarding process
+          'track_id': null, // This will be updated later during onboarding
+        });
+
+        // Show a success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Intern account created successfully!')),
+        );
+
+        // Navigate back to the Admin Dashboard
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => AdminDashboard()),
+        );
+      }
+    } on AuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error creating user: ${e.message}')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('An unexpected error occurred: ${e.toString()}'),
+        ),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   void initState() {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:opex_intern_hub/features/intern/screens/intern_dashboard.dart';
+import 'package:opex_intern_hub/features/intern/screens/onboarding_screen/onboarding_journey.dart';
+// import 'package:opex_intern_hub/features/intern/screens/intern_dashboard.dart';
 
 class CongratulationsScreen extends StatelessWidget {
   const CongratulationsScreen({super.key});
@@ -67,7 +68,7 @@ class CongratulationsScreen extends StatelessWidget {
 
               // Subtitle Text
               const Text(
-                'Onboarding in progress...',
+                'Onboarding Complete',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -79,7 +80,7 @@ class CongratulationsScreen extends StatelessWidget {
               const SizedBox(height: 8),
 
               const Text(
-                'You\'re ready to begin your journey.',
+                'An admin will assign you a supervisor based on your chosen track. Please check back later to begin your internship',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
@@ -96,16 +97,13 @@ class CongratulationsScreen extends StatelessWidget {
                 height: 56,
                 margin: const EdgeInsets.only(bottom: 40),
                 child: ElevatedButton(
+                  // Logic for the 'Done' button
                   onPressed: () {
-                    // Handle button press
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => InternDashboard(),
-                    //   ),
-                    // );
-
-                    Navigator.popUntil(context, (route) => route.isFirst);
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => const OnboardingHome(),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1E3A8A),

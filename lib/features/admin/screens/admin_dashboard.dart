@@ -1,9 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:opex_intern_hub/features/admin/screens/add_new_interns.dart';
 import 'package:opex_intern_hub/features/admin/screens/awaiting_supervisors.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-class AdminDashboard extends StatelessWidget {
+class AdminDashboard extends StatefulWidget {
   const AdminDashboard({Key? key}) : super(key: key);
+
+  @override
+  State<AdminDashboard> createState() => _AdminDashboardState();
+}
+
+class _AdminDashboardState extends State<AdminDashboard> {
+  int _internCount = 0;
+  int _supervisorCount = 0;
+  bool _isLoading = true;
+
+  @override
+  @override
+  void initState() {
+    super.initState();
+    _fetchCount();
+  }
+
+  Future<void> _fetchCount() async {
+    try {
+      // Fetch the count of interns
+      final internCount =
+          await Supabase.instance.client.from('interns').count();
+
+      // Fetch the count of supervisors
+      final supervisorCount =
+          await Supabase.instance.client.from('supervisors').count();
+
+      setState(() {
+        _internCount = internCount;
+        _supervisorCount = supervisorCount;
+        _isLoading = false;
+      });
+    } catch (e) {
+      // Handle any errors
+      print('Error fetching counts: $e');
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +75,7 @@ class AdminDashboard extends StatelessWidget {
                   color: const Color(0xFF1E3A8A),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
                     Expanded(
                       child: Column(
@@ -50,7 +91,7 @@ class AdminDashboard extends StatelessWidget {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            '17',
+                            _internCount.toString(),
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 48,
@@ -66,7 +107,7 @@ class AdminDashboard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Pending Onboarding',
+                            'Total Number of \nSupervisors',
                             style: TextStyle(
                               color: Colors.white70,
                               fontSize: 14,
@@ -75,7 +116,7 @@ class AdminDashboard extends StatelessWidget {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            '10',
+                            _supervisorCount.toString(),
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 48,
@@ -115,8 +156,7 @@ class AdminDashboard extends StatelessWidget {
                           const SizedBox(height: 16),
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                context,
+                              Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => OnboardInternWidget(),
                                 ),
@@ -179,8 +219,7 @@ class AdminDashboard extends StatelessWidget {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
+                                  Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder:
                                           (context) =>

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+
 import 'package:opex_intern_hub/features/intern/screens/onboarding_screen/onboarding_journey.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -18,6 +20,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController fieldOfStudyController = TextEditingController();
   final TextEditingController universityController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  bool _isLoading = false;
+  Future<void> _completeOnboarding() async {
+    setState(() {
+      _isLoading = true; // Start the loading indicator
+    });
+
+    try {
+      // Step 1: Update the user's password in Supabase Authentication
+      await Supabase.instance.client.auth.updateUser(
+        UserAttributes(password: passwordController.text.trim()),
+      );
+
+      // Step 2: Update the intern's profile in the 'interns' table
+      final currentUser = Supabase.instance.client.auth.currentUser;
+      if (currentUser != null) {
+        await Supabase.instance.client
+            .from('interns')
+            .update({
+              'full_name': fullNameController.text.trim(),
+              'phone_number': phoneController.text.trim(),
+              'location': locationController.text.trim(),
+              'email': emailController.text.trim(),
+              'field_of_study': fieldOfStudyController.text.trim(),
+              'university': universityController.text.trim(),
+              'is_onboarded': true, // Crucial: set the flag to true
+            })
+            .eq('intern_id', currentUser.id);
+      }
+
+      // Step 3: Show a success message
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Onboarding complete!')));
+
+      // Step 4: Navigate the intern to their dashboard
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const OnboardingHome()),
+      );
+    } catch (e) {
+      // Handle any errors that occur
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: ${e.toString()}')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false; // Stop the loading state
+      });
+    }
+  }
 
   XFile? _pickedImage;
   final ImagePicker _picker = ImagePicker();
@@ -281,14 +333,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               width: double.infinity,
               height: 56,
               child: ElevatedButton(
-                onPressed: () {
-                  // Handle complete profile action
-                  print('Complete Profile pressed');
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => OnboardingHome()),
-                  );
-                },
+                onPressed: _isLoading ? null : _completeOnboarding,
+
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF1E3A8A), // Deep blue color
                   shape: RoundedRectangleBorder(
@@ -296,14 +342,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   elevation: 0,
                 ),
-                child: Text(
-                  'Complete Profile',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                child:
+                    _isLoading
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                          'Complete Profile',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
               ),
             ),
 
