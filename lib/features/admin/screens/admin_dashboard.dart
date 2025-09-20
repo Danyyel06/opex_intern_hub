@@ -11,38 +11,69 @@ class AdminDashboard extends StatefulWidget {
 }
 
 class _AdminDashboardState extends State<AdminDashboard> {
+  final _supabase = Supabase.instance.client;
+  List<dynamic> _internsDirectory = [];
+  bool _isLoading = true; // Initial loading state set to true
+
   int _internCount = 0;
   int _supervisorCount = 0;
-  bool _isLoading = true;
+  int _readyForAssignmentCount = 0; // New variable for dynamic count
 
-  @override
   @override
   void initState() {
     super.initState();
-    _fetchCount();
+    _fetchDashboardData(); // Consolidated all data fetching into one function
   }
 
-  Future<void> _fetchCount() async {
-    try {
-      // Fetch the count of interns
-      final internCount =
-          await Supabase.instance.client.from('interns').count();
+  // Consolidated function to fetch all dashboard data
+  Future<void> _fetchDashboardData() async {
+    setState(() {
+      _isLoading = true;
+    });
 
-      // Fetch the count of supervisors
-      final supervisorCount =
-          await Supabase.instance.client.from('supervisors').count();
+    try {
+      // Fetch the total count of interns
+      final internCount = await _supabase.from('interns').count();
+
+      // Fetch the total count of supervisors
+      final supervisorCount = await _supabase.from('supervisors').count();
+
+      // Fetch the count of interns ready for assignment
+      final readyForAssignmentCount =
+          await _supabase
+              .from('interns')
+              .select()
+              .not('track_id', 'is', null) // Has a track
+              .filter('supervisor_id', 'is', null) // Does not have a supervisor
+              .count();
+
+      // Fetch the list of all fully onboarded interns for the directory
+      final internsDirectoryResponse = await _supabase
+          .from('interns')
+          .select('full_name, track_id, profile_image')
+          .not('track_id', 'is', null)
+          .not('supervisor_id', 'is', null)
+          .order('full_name', ascending: true);
 
       setState(() {
         _internCount = internCount;
         _supervisorCount = supervisorCount;
-        _isLoading = false;
+        _readyForAssignmentCount = readyForAssignmentCount as int;
+        _internsDirectory = internsDirectoryResponse;
       });
     } catch (e) {
-      // Handle any errors
-      print('Error fetching counts: $e');
-      setState(() {
-        _isLoading = false;
-      });
+      print('Error fetching dashboard data: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to load dashboard data.')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -81,7 +112,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'Total Number\nof Interns',
                             style: TextStyle(
                               color: Colors.white70,
@@ -89,10 +120,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text(
                             _internCount.toString(),
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 48,
                               fontWeight: FontWeight.bold,
@@ -101,12 +132,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         ],
                       ),
                     ),
-                    SizedBox(width: 70),
+                    const SizedBox(width: 70),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'Total Number of \nSupervisors',
                             style: TextStyle(
                               color: Colors.white70,
@@ -114,10 +145,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text(
                             _supervisorCount.toString(),
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 48,
                               fontWeight: FontWeight.bold,
@@ -209,9 +240,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
-                                '10',
-                                style: TextStyle(
+                              Text(
+                                _readyForAssignmentCount
+                                    .toString(), // Made this dynamic
+                                style: const TextStyle(
                                   color: Color(0xFF1E3A8A),
                                   fontSize: 36,
                                   fontWeight: FontWeight.bold,
@@ -260,10 +292,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
               ),
               const SizedBox(height: 10),
 
-              // Interns List
+              // Interns List (Dynamic)
               Expanded(
                 child: Container(
-                  height: 600,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
@@ -276,43 +307,27 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       ),
                     ],
                   ),
-                  child: Scrollbar(
-                    child: ListView(
-                      padding: const EdgeInsets.all(20),
-                      children: const [
-                        InternListItem(
-                          name: 'Emery Korsgard',
-                          role: 'Project Manager',
-                          imageAsset: 'assets/images/emery.png',
-                        ),
-                        InternListItem(
-                          name: 'Jeremy Zucker',
-                          role: 'Front-End Engineer',
-                          imageAsset: 'assets/images/jeremy.png',
-                        ),
-                        InternListItem(
-                          name: 'Nadia Lauren',
-                          role: 'UI/UX Designer',
-                          imageAsset: 'assets/images/nadia.png',
-                        ),
-                        InternListItem(
-                          name: 'Jason Statham',
-                          role: 'Back-End Engineer',
-                          imageAsset: 'assets/images/jason_s.png',
-                        ),
-                        InternListItem(
-                          name: 'Angel Kimberly',
-                          role: 'UI/UX Designer',
-                          imageAsset: 'assets/images/angel.png',
-                        ),
-                        InternListItem(
-                          name: 'Jason Momoa',
-                          role: 'Front-End Engineer',
-                          imageAsset: 'assets/images/jason_m.png',
-                        ),
-                      ],
-                    ),
-                  ),
+                  child:
+                      _isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : _internsDirectory.isEmpty
+                          ? const Center(
+                            child: Text('No interns found in the directory.'),
+                          )
+                          : ListView.builder(
+                            padding: const EdgeInsets.all(20),
+                            itemCount: _internsDirectory.length,
+                            itemBuilder: (context, index) {
+                              final intern = _internsDirectory[index];
+                              return InternListItem(
+                                name: intern['full_name'] as String,
+                                role: intern['track_id'] as String,
+                                imageAsset:
+                                    intern['profile_image'] as String? ??
+                                    'assets/images/placeholder.png',
+                              );
+                            },
+                          ),
                 ),
               ),
             ],

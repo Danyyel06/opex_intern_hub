@@ -27,9 +27,7 @@ class _SupervisorAssignmentScreenState
     try {
       final response = await _supabase
           .from('interns')
-          .select(
-            'intern_id, full_name, track_id, profile_image',
-          )
+          .select('intern_id, full_name, track_id, profile_image')
           .filter('supervisor_id', 'is', null)
           .not('track_id', 'is', null);
 
@@ -134,13 +132,20 @@ class _SupervisorAssignmentScreenState
                   width: double.infinity,
                   height: 56,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                      // Navigate to the assignment page and await the result
+                      final bool? result = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => SupervisorAssignmentPage(),
                         ),
                       );
+
+                      // If the result is true, it means an intern was assigned.
+                      // We should then refresh the list.
+                      if (result == true) {
+                        _fetchUnassignedInterns();
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF1E3A8A),
