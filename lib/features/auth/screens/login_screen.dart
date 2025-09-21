@@ -94,6 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _isLoading = false; // Stop the loading indicator
       });
+      print('isLoading is now : $_isLoading');
     }
   }
 
@@ -101,15 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFF8F9FA),
-        elevation: 0,
-        toolbarHeight: 80,
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          statusBarIconBrightness: Brightness.dark,
-        ),
-      ),
+
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -267,7 +260,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 52,
                   margin: const EdgeInsets.only(bottom: 40),
                   child: ElevatedButton(
-                    onPressed: _isLoading ? null : _signIn,
+                    onPressed: _isLoading ? null : () => _signIn(),
 
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF1E3A8A),
