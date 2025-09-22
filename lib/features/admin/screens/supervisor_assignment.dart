@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:opex_intern_hub/features/admin/widgets/congrats.dart';
+import 'package:opex_intern_hub/features/admin/screens/congrats.dart';
 import 'package:opex_intern_hub/features/admin/screens/admin_dashboard.dart'; // Import your admin dashboard here
 
 class SupervisorAssignmentPage extends StatefulWidget {

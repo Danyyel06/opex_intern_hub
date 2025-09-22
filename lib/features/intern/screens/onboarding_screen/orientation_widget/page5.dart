@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:opex_intern_hub/features/intern/screens/onboarding_screen/orientation_widget/complete_onboarding.dart';
-// import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:opex_intern_hub/services/intern_service.dart';
+import 'package:opex_intern_hub/features/intern/screens/intern_dashboard.dart';
 
 class OnboardingStage5 extends StatefulWidget {
   @override
@@ -10,6 +11,65 @@ class OnboardingStage5 extends StatefulWidget {
 class _OnboardingStage5State extends State<OnboardingStage5> {
   String? selectedPath;
   bool _isLoading = false;
+
+  final List<Map<String, String>> tracks = [
+    {'title': 'Product Manager', 'image': 'images/Product Manager.png'},
+    {
+      'title': 'Front-End Engineer',
+      'image': 'images/Web Development 2 (1).png',
+    },
+    {'title': 'Back-End Engineer', 'image': 'images/Coding 2.png'},
+    {'title': 'UI/UX Designer', 'image': 'images/Wireframe (1).png'},
+  ];
+
+  Future<void> _completeOnboarding() async {
+    if (selectedPath == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please select a track before continuing'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      final success = await InternService.completeTrackSelection(selectedPath!);
+
+      setState(() => _isLoading = false);
+
+      if (success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Track selected successfully!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        // Navigate to intern dashboard
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const InternDashboard()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Failed to complete track selection. Please try again.',
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      setState(() => _isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +108,7 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
+
               Center(
                 child: Container(
                   width: double.infinity,
@@ -66,11 +127,25 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
                       fit: BoxFit.cover,
                       width: 350,
                       height: 350,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          width: 350,
+                          height: 350,
+                          color: Colors.grey[300],
+                          child: const Icon(
+                            Icons.image_not_supported,
+                            size: 50,
+                            color: Colors.grey,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
               ),
+
               const SizedBox(height: 32),
+
               const Text(
                 'STAGE 5',
                 style: TextStyle(
@@ -81,6 +156,7 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
                 ),
               ),
               const SizedBox(height: 8),
+
               const Text(
                 'Your Desired\nPath',
                 style: TextStyle(
@@ -91,6 +167,7 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
                 ),
               ),
               const SizedBox(height: 16),
+
               const Text(
                 'Congratulations on reaching the final stage of your onboarding journey!',
                 style: TextStyle(
@@ -100,6 +177,7 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
                 ),
               ),
               const SizedBox(height: 16),
+
               const Text(
                 'This module is your opportunity to define the path you\'d like to take at Opex Consulting. Your selection will help us understand your professional interests and align you with projects and mentors that will be most fulfilling for you.',
                 style: TextStyle(
@@ -109,6 +187,7 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
                 ),
               ),
               const SizedBox(height: 16),
+
               const Text(
                 'This is a crucial step in shaping your internship experience and setting you up for success. Please take a moment to review the available roles and select the one that best matches your passion and career goals.',
                 style: TextStyle(
@@ -118,6 +197,8 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
                 ),
               ),
               const SizedBox(height: 32),
+
+              // Track Selection Cards
               SizedBox(
                 height: 400,
                 child: GridView.count(
@@ -127,46 +208,36 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
                   childAspectRatio: 0.85,
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  children: [
-                    _buildRoleCard(
-                      'Product Manager',
-                      'images/Product Manager.png',
-                    ),
-                    _buildRoleCard(
-                      'Front-End Engineer',
-                      'images/Web Development 2 (1).png',
-                    ),
-                    _buildRoleCard('Back-End Engineer', 'images/Coding 2.png'),
-                    _buildRoleCard(
-                      'UI/UX Designer',
-                      'images/Wireframe (1).png',
-                    ),
-                  ],
+                  children:
+                      tracks
+                          .map(
+                            (track) => _buildRoleCard(
+                              track['title']!,
+                              track['image']!,
+                            ),
+                          )
+                          .toList(),
                 ),
               ),
               const SizedBox(height: 24),
+
+              // Complete Onboarding Button
               SizedBox(
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CongratulationsScreen(),
-                      ),
-                    );
-                  },
-
+                  onPressed: _isLoading ? null : _completeOnboarding,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF102592),
+                    backgroundColor:
+                        selectedPath != null
+                            ? const Color(0xFF102592)
+                            : const Color(0xFF9CA3AF),
                     disabledBackgroundColor: const Color(0xFF9CA3AF),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                     elevation: 0,
                   ),
-                  // ... existing style properties
                   child:
                       _isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
@@ -221,7 +292,20 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
             Expanded(
               child: SizedBox(
                 width: double.infinity,
-                child: Image.asset(imagePath, fit: BoxFit.contain),
+                child: Image.asset(
+                  imagePath,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: Colors.grey[200],
+                      child: Icon(
+                        _getIconForTrack(title),
+                        size: 48,
+                        color: Colors.grey[400],
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -242,5 +326,20 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
         ),
       ),
     );
+  }
+
+  IconData _getIconForTrack(String title) {
+    switch (title) {
+      case 'Product Manager':
+        return Icons.manage_accounts;
+      case 'Front-End Engineer':
+        return Icons.web;
+      case 'Back-End Engineer':
+        return Icons.code;
+      case 'UI/UX Designer':
+        return Icons.design_services;
+      default:
+        return Icons.work;
+    }
   }
 }

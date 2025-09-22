@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:opex_intern_hub/features/admin/screens/add_new_interns.dart';
 import 'package:opex_intern_hub/features/admin/screens/awaiting_supervisors.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:opex_intern_hub/services/admin_service.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({Key? key}) : super(key: key);
@@ -11,70 +11,60 @@ class AdminDashboard extends StatefulWidget {
 }
 
 class _AdminDashboardState extends State<AdminDashboard> {
-  final _supabase = Supabase.instance.client;
-  List<dynamic> _internsDirectory = [];
-  bool _isLoading = true; // Initial loading state set to true
+  List<Map<String, dynamic>> _internsDirectory = [];
+  bool _isLoading = true;
 
   int _internCount = 0;
   int _supervisorCount = 0;
-  int _readyForAssignmentCount = 0; // New variable for dynamic count
+  int _readyForAssignmentCount = 0;
 
   @override
   void initState() {
     super.initState();
-    _fetchDashboardData(); // Consolidated all data fetching into one function
+    _fetchDashboardData();
   }
 
-  // Consolidated function to fetch all dashboard data
   Future<void> _fetchDashboardData() async {
     setState(() {
       _isLoading = true;
     });
 
     try {
-      // Fetch the total count of interns
-      final internCount = await _supabase.from('interns').count();
+      // Fetch dashboard metrics
+      final metrics = await AdminService.getDashboardMetrics();
 
-      // Fetch the total count of supervisors
-      final supervisorCount = await _supabase.from('supervisors').count();
+      // Fetch interns directory
+      final directory = await AdminService.getInternsDirectory();
 
-      // Fetch the count of interns ready for assignment
-      final readyForAssignmentCount =
-          await _supabase
-              .from('interns')
-              .select()
-              .not('track_id', 'is', null) // Has a track
-              .filter('supervisor_id', 'is', null) // Does not have a supervisor
-              .count();
-
-      // Fetch the list of all fully onboarded interns for the directory
-      final internsDirectoryResponse = await _supabase
-          .from('interns')
-          .select('full_name, track_id, profile_image')
-          .not('track_id', 'is', null)
-          .not('supervisor_id', 'is', null)
-          .order('full_name', ascending: true);
+      // Fetch interns ready for assignment
+      final readyForAssignment =
+          await AdminService.getInternsReadyForAssignment();
 
       setState(() {
-        _internCount = internCount;
-        _supervisorCount = supervisorCount;
-        _readyForAssignmentCount = readyForAssignmentCount as int;
-        _internsDirectory = internsDirectoryResponse;
+        _internCount = metrics['total_interns'] ?? 0;
+        _supervisorCount = metrics['total_supervisors'] ?? 0;
+        _readyForAssignmentCount = readyForAssignment.length;
+        _internsDirectory = directory;
+        _isLoading = false;
       });
     } catch (e) {
       print('Error fetching dashboard data: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to load dashboard data.')),
-        );
-      }
-    } finally {
-      if (mounted) {
         setState(() {
           _isLoading = false;
         });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to load dashboard data: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     }
+  }
+
+  Future<void> _refreshDashboard() async {
+    await _fetchDashboardData();
   }
 
   @override
@@ -82,255 +72,314 @@ class _AdminDashboardState extends State<AdminDashboard> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6FA),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Title
-              const Text(
-                'Admin Dashboard',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF1E3A8A),
-                ),
-              ),
-              const SizedBox(height: 30),
-
-              // Stats Card
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF1E3A8A),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
+        child: RefreshIndicator(
+          onRefresh: _refreshDashboard,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Title
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Number\nof Interns',
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            _internCount.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 48,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                    const Text(
+                      'Admin Dashboard',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1E3A8A),
                       ),
                     ),
-                    const SizedBox(width: 70),
+                    IconButton(
+                      onPressed: _refreshDashboard,
+                      icon:
+                          _isLoading
+                              ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                              : const Icon(Icons.refresh),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 30),
+
+                // Stats Card
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1E3A8A),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Number\nof Interns',
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              _internCount.toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 48,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 70),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Number of \nSupervisors',
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              _supervisorCount.toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 48,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Interns Directory
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    // Add new Intern Card
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Number of \nSupervisors',
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
+                      child: Container(
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1E3A8A),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Add new\nIntern',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            _supervisorCount.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 48,
-                              fontWeight: FontWeight.bold,
+                            const SizedBox(height: 16),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context)
+                                    .push(
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) =>
+                                                const OnboardInternWidget(),
+                                      ),
+                                    )
+                                    .then((_) {
+                                      // Refresh dashboard when returning from create intern
+                                      _fetchDashboardData();
+                                    });
+                              },
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.2),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  Icons.arrow_forward,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              ),
                             ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+
+                    // Ready for assignment Card
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: const Color(0xFF1E3A8A),
+                            width: 2,
                           ),
-                        ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Ready for\nassignment',
+                              style: TextStyle(
+                                color: Color(0xFF1E3A8A),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  _readyForAssignmentCount.toString(),
+                                  style: const TextStyle(
+                                    color: Color(0xFF1E3A8A),
+                                    fontSize: 36,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .push(
+                                          MaterialPageRoute(
+                                            builder:
+                                                (context) =>
+                                                    SupervisorAssignmentScreen(),
+                                          ),
+                                        )
+                                        .then((_) {
+                                          // Refresh dashboard when returning from assignment
+                                          _fetchDashboardData();
+                                        });
+                                  },
+                                  child: Container(
+                                    width: 36,
+                                    height: 36,
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xFF1E3A8A),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(
+                                      Icons.arrow_forward,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
                 ),
-              ),
-
-              // Interns Directory
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  // Add new Intern Card
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1E3A8A),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Add new\nIntern',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => OnboardInternWidget(),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.2),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.arrow_forward,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Interns Directory',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF374151),
                   ),
-                  const SizedBox(width: 16),
+                ),
+                const SizedBox(height: 10),
 
-                  // Ready for assignment Card
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: const Color(0xFF1E3A8A),
-                          width: 2,
+                // Interns List (Dynamic)
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.1),
+                          spreadRadius: 1,
+                          blurRadius: 10,
+                          offset: const Offset(0, 2),
                         ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Ready for\nassignment',
-                            style: TextStyle(
-                              color: Color(0xFF1E3A8A),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                _readyForAssignmentCount
-                                    .toString(), // Made this dynamic
-                                style: const TextStyle(
-                                  color: Color(0xFF1E3A8A),
-                                  fontSize: 36,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder:
-                                          (context) =>
-                                              SupervisorAssignmentScreen(),
-                                    ),
-                                  );
-                                },
-                                child: Container(
-                                  width: 36,
-                                  height: 36,
-                                  decoration: const BoxDecoration(
-                                    color: Color(0xFF1E3A8A),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(
-                                    Icons.arrow_forward,
-                                    color: Colors.white,
-                                    size: 18,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                      ],
                     ),
+                    child:
+                        _isLoading
+                            ? const Center(child: CircularProgressIndicator())
+                            : _internsDirectory.isEmpty
+                            ? const Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.people_outline,
+                                    size: 48,
+                                    color: Color(0xFF9CA3AF),
+                                  ),
+                                  SizedBox(height: 16),
+                                  Text(
+                                    'No interns in directory yet',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Color(0xFF6B7280),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    'Create new intern accounts to see them here',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Color(0xFF9CA3AF),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                            : ListView.builder(
+                              padding: const EdgeInsets.all(20),
+                              itemCount: _internsDirectory.length,
+                              itemBuilder: (context, index) {
+                                final intern = _internsDirectory[index];
+                                return InternListItem(
+                                  name:
+                                      intern['profiles']['full_name'] ??
+                                      'Unknown Name',
+                                  role: intern['track'] ?? 'No Track Selected',
+                                  imageAsset:
+                                      'assets/images/placeholder.png', // Default placeholder
+                                );
+                              },
+                            ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Interns Directory',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF374151),
                 ),
-              ),
-              const SizedBox(height: 10),
-
-              // Interns List (Dynamic)
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
-                        spreadRadius: 1,
-                        blurRadius: 10,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child:
-                      _isLoading
-                          ? const Center(child: CircularProgressIndicator())
-                          : _internsDirectory.isEmpty
-                          ? const Center(
-                            child: Text('No interns found in the directory.'),
-                          )
-                          : ListView.builder(
-                            padding: const EdgeInsets.all(20),
-                            itemCount: _internsDirectory.length,
-                            itemBuilder: (context, index) {
-                              final intern = _internsDirectory[index];
-                              return InternListItem(
-                                name: intern['full_name'] as String,
-                                role: intern['track_id'] as String,
-                                imageAsset:
-                                    intern['profile_image'] as String? ??
-                                    'assets/images/placeholder.png',
-                              );
-                            },
-                          ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

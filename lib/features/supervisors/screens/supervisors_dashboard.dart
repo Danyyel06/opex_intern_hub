@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:opex_intern_hub/features/supervisors/screens/supervisors_profile.dart';
 import 'package:opex_intern_hub/features/supervisors/screens/task_manager.dart';
 import 'package:opex_intern_hub/features/supervisors/screens/pending_approvals.dart';
+import 'package:opex_intern_hub/services/supervisor_service.dart';
+import 'package:opex_intern_hub/services/auth_service.dart';
 
 class SupervisorDashboard extends StatefulWidget {
   const SupervisorDashboard({Key? key}) : super(key: key);
@@ -11,23 +13,61 @@ class SupervisorDashboard extends StatefulWidget {
 }
 
 class _SupervisorDashboardState extends State<SupervisorDashboard> {
+  int pendingReviews = 0;
+  List<Map<String, dynamic>> supervisedInterns = [];
+  bool isLoading = true;
+  String supervisorName = 'Supervisor';
+
+  @override
+  void initState() {
+    super.initState();
+    loadDashboardData();
+  }
+
+  Future<void> loadDashboardData() async {
+    setState(() => isLoading = true);
+
+    try {
+      // Get current user info
+      final userInfo = await AuthService.getCurrentUserInfo();
+      if (userInfo != null) {
+        supervisorName = userInfo['full_name'] ?? 'Supervisor';
+      }
+
+      // Get dashboard data
+      final dashboardData = await SupervisorService.getDashboardData();
+
+      setState(() {
+        pendingReviews = dashboardData['pending_reviews'] ?? 0;
+        supervisedInterns = dashboardData['supervised_interns'] ?? [];
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() => isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error loading data: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  Future<void> _refreshDashboard() async {
+    await loadDashboardData();
+  }
+
   void _onNavTap(int index) {
     if (index == 0) return; // Already on Home
     if (index == 1) {
-      // TODO: Replace with your actual History page
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => TaskManagerScreen()),
       );
     } else if (index == 2) {
-      // TODO: Replace with your actual Profile page
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder:
-              (context) =>
-                  SupervisorsProfile(), // Replace with your Profile screen widget
-        ),
+        MaterialPageRoute(builder: (context) => SupervisorsProfile()),
       );
     }
   }
@@ -37,168 +77,201 @@ class _SupervisorDashboardState extends State<SupervisorDashboard> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header Section
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Hi, Japheth',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey[800],
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      const Text(
-                        'Supervisor Dashboard',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF1E3A8A),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 32),
-
-              // Review Pending Tasks Card
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF1E3A8A),
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                child: Row(
+        child: RefreshIndicator(
+          onRefresh: _refreshDashboard,
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header Section
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Review Pending Tasks',
+                        Text(
+                          'Hi, ${supervisorName.split(' ').first}',
                           style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                            color: Colors.grey[800],
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
-                        const SizedBox(height: 8),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.alphabetic,
-                          children: [
-                            const Text(
-                              '3',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 48,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'tasks',
-                              style: TextStyle(
-                                color: Colors.white.withOpacity(0.8),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
+                        const SizedBox(height: 4),
+                        const Text(
+                          'Supervisor Dashboard',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1E3A8A),
+                          ),
                         ),
                       ],
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PendingApprovalsScreen(),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Icon(
-                          Icons.arrow_outward,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ),
+                    IconButton(
+                      onPressed: _refreshDashboard,
+                      icon:
+                          isLoading
+                              ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                              : const Icon(Icons.refresh),
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 40),
+                const SizedBox(height: 32),
 
-              // Supervised Interns Section
-              const Text(
-                'Supervised Interns',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Interns List
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(20),
+                // Review Pending Tasks Card
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    color: Colors.grey[50],
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.grey[200]!, width: 1),
+                    color: const Color(0xFF1E3A8A),
+                    borderRadius: BorderRadius.circular(24),
                   ),
-                  child: ListView(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildInternItem(
-                        'Emery Korsgard',
-                        'assets/images/emery.png',
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Review Pending Tasks',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.alphabetic,
+                            children: [
+                              Text(
+                                pendingReviews.toString(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 48,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'tasks',
+                                style: TextStyle(
+                                  color: Colors.white.withOpacity(0.8),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      _buildInternItem(
-                        'Jeremy Zucker',
-                        'assets/images/jeremy.png',
-                      ),
-                      _buildInternItem(
-                        'Nadia Lauren',
-                        'assets/images/nadia.png',
-                      ),
-                      _buildInternItem(
-                        'Jason Statham',
-                        'assets/images/jason_s.png',
-                      ),
-                      _buildInternItem(
-                        'Angel Kimberly',
-                        'assets/images/angel.png',
-                      ),
-                      _buildInternItem(
-                        'Jason Momoa',
-                        'assets/images/jason_m.png',
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PendingApprovalsScreen(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.arrow_outward,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 40),
+
+                // Supervised Interns Section
+                const Text(
+                  'Supervised Interns',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                // Interns List
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[50],
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.grey[200]!, width: 1),
+                    ),
+                    child:
+                        isLoading
+                            ? const Center(child: CircularProgressIndicator())
+                            : supervisedInterns.isEmpty
+                            ? const Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.people_outline,
+                                    size: 48,
+                                    color: Color(0xFF9CA3AF),
+                                  ),
+                                  SizedBox(height: 16),
+                                  Text(
+                                    'No interns assigned yet',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Color(0xFF6B7280),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    'Interns will appear here once assigned by admin',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Color(0xFF9CA3AF),
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            )
+                            : ListView.builder(
+                              itemCount: supervisedInterns.length,
+                              itemBuilder: (context, index) {
+                                final intern = supervisedInterns[index];
+                                return _buildInternItem(
+                                  intern['profiles']['full_name'] ??
+                                      'Unknown Name',
+                                  'assets/images/placeholder.png',
+                                );
+                              },
+                            ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -281,7 +354,7 @@ class _SupervisorDashboardState extends State<SupervisorDashboard> {
               ),
               const SizedBox(height: 4),
               Text(
-                'Creating a User Flow',
+                'Intern',
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey[600],
@@ -294,26 +367,26 @@ class _SupervisorDashboardState extends State<SupervisorDashboard> {
       ),
     );
   }
-}
 
-Widget _buildNavItem(IconData icon, String label, bool isActive) {
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      Icon(
-        icon,
-        color: isActive ? const Color(0xFF1E3A8A) : const Color(0xFF9CA3AF),
-        size: 24,
-      ),
-      const SizedBox(height: 4),
-      Text(
-        label,
-        style: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
+  Widget _buildNavItem(IconData icon, String label, bool isActive) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(
+          icon,
           color: isActive ? const Color(0xFF1E3A8A) : const Color(0xFF9CA3AF),
+          size: 24,
         ),
-      ),
-    ],
-  );
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: isActive ? const Color(0xFF1E3A8A) : const Color(0xFF9CA3AF),
+          ),
+        ),
+      ],
+    );
+  }
 }
