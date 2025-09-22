@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:opex_intern_hub/features/auth/screens/intern_onboarding_page.dart';
 import 'package:opex_intern_hub/features/auth/screens/forgot_password.dart';
 
-import 'package:opex_intern_hub/features/intern/screens/intern_dashboard.dart';
-import 'package:opex_intern_hub/features/supervisors/screens/supervisors_dashboard.dart';
-import 'package:opex_intern_hub/features/admin/screens/admin_dashboard.dart';
+// import 'package:opex_intern_hub/features/intern/screens/intern_dashboard.dart';
+// import 'package:opex_intern_hub/features/supervisors/screens/supervisors_dashboard.dart';
+// import 'package:opex_intern_hub/features/admin/screens/admin_dashboard.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,82 +20,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   bool _isPasswordVisible = false;
   bool _isLoading = false;
-  Future<void> _signIn() async {
-    setState(() {
-      _isLoading = true; // Start the loading indicator
-    });
-
-    try {
-      final AuthResponse res = await Supabase.instance.client.auth
-          .signInWithPassword(
-            email: _emailController.text.trim(),
-            password: _passwordController.text.trim(),
-          );
-
-      // After successful login, check if the user object is not null
-      final user = res.user;
-      if (user != null) {
-        // Step 1: Fetch the user's type from the 'users' table
-        final response =
-            await Supabase.instance.client
-                .from('users')
-                .select('user_type')
-                .eq('user_id', user.id)
-                .single();
-
-        final userType = response['user_type'];
-
-        // Step 2: Navigate based on user_type
-        if (userType == 'intern') {
-          // Check the 'is_onboarded' flag for interns
-          final internResponse =
-              await Supabase.instance.client
-                  .from('interns')
-                  .select('is_onboarded')
-                  .eq('intern_id', user.id)
-                  .single();
-
-          if (internResponse['is_onboarded'] == false) {
-            // Navigate to the onboarding flow
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => ProfileScreen(),
-              ), // Your onboarding page
-            );
-          } else {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const InternDashboard()),
-            );
-          }
-        } else if (userType == 'supervisor') {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => const SupervisorDashboard(),
-            ),
-          );
-        } else if (userType == 'admin') {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const AdminDashboard()),
-          );
-        }
-      }
-    } on AuthException catch (e) {
-      // Handle authentication errors, like wrong password
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(e.message)));
-    } catch (e) {
-      // Handle any other errors
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(e.toString())));
-    } finally {
-      setState(() {
-        _isLoading = false; // Stop the loading indicator
-      });
-      print('isLoading is now : $_isLoading');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -146,6 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: TextFormField(
+                    controller: _emailController,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w400,
@@ -260,7 +184,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 52,
                   margin: const EdgeInsets.only(bottom: 40),
                   child: ElevatedButton(
-                    onPressed: _isLoading ? null : () => _signIn(),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfileScreen(),
+                        ),
+                      );
+                    },
 
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF1E3A8A),

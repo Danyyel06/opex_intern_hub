@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:opex_intern_hub/features/intern/screens/onboarding_screen/onboarding_journey.dart';
+import 'package:opex_intern_hub/features/intern/screens/intern_dashboard.dart';
 // import 'package:opex_intern_hub/features/intern/screens/intern_dashboard.dart';
 
 class CongratulationsScreen extends StatelessWidget {
@@ -99,9 +99,10 @@ class CongratulationsScreen extends StatelessWidget {
                 child: ElevatedButton(
                   // Logic for the 'Done' button
                   onPressed: () {
-                    Navigator.of(context).pushReplacement(
+                    Navigator.push(
+                      context,
                       MaterialPageRoute(
-                        builder: (context) => const OnboardingHome(),
+                        builder: (context) => InternDashboard(),
                       ),
                     );
                   },

@@ -1,6 +1,5 @@
-// main.dart (your new setup)
 import 'package:flutter/material.dart';
-import 'package:opex_intern_hub/auth_gate.dart'; // Import the AuthGate you will create
+import 'package:opex_intern_hub/splash_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
@@ -21,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: AuthGate(), // This is the new entry point
+      home: SplashScreen(),
     );
   }
 }

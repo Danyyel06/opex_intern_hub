@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:opex_intern_hub/features/intern/screens/onboarding_screen/orientation_widget/complete_onboarding.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+// import 'package:supabase_flutter/supabase_flutter.dart';
 
 class OnboardingStage5 extends StatefulWidget {
   @override
@@ -10,63 +10,6 @@ class OnboardingStage5 extends StatefulWidget {
 class _OnboardingStage5State extends State<OnboardingStage5> {
   String? selectedPath;
   bool _isLoading = false;
-  final supabase = Supabase.instance.client;
-
-  Future<void> _saveTrackSelection() async {
-    if (selectedPath == null) {
-      // Optional: show a snackbar if no track is selected
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a track to continue.')),
-      );
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      // You'll need a way to map the selected path string to a track ID.
-      // For example, using a simple map.
-      final Map<String, int> trackMap = {
-        'Product Manager': 1, // Assuming these are your track IDs
-        'Front-End Engineer': 2,
-        'Back-End Engineer': 3,
-        'UI/UX Designer': 4,
-      };
-
-      final int? selectedTrackId = trackMap[selectedPath];
-
-      if (selectedTrackId != null) {
-        final currentUser = Supabase.instance.client.auth.currentUser;
-        if (currentUser != null) {
-          await Supabase.instance.client
-              .from('interns')
-              .update({'track_id': selectedTrackId})
-              .eq('intern_id', currentUser.id);
-
-          // On success, navigate to the congratulations page
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => const CongratulationsScreen(),
-            ),
-          );
-        } else {
-          throw 'User not logged in';
-        }
-      } else {
-        throw 'Invalid track selected';
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An error occurred: ${e.toString()}')),
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -206,10 +149,15 @@ class _OnboardingStage5State extends State<OnboardingStage5> {
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed:
-                      selectedPath != null && !_isLoading
-                          ? _saveTrackSelection // Call the new function
-                          : null,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CongratulationsScreen(),
+                      ),
+                    );
+                  },
+
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF102592),
                     disabledBackgroundColor: const Color(0xFF9CA3AF),

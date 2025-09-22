@@ -113,7 +113,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Total Number\nof Interns',
+                            'Number\nof Interns',
                             style: TextStyle(
                               color: Colors.white70,
                               fontSize: 14,
@@ -138,7 +138,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Total Number of \nSupervisors',
+                            'Number of \nSupervisors',
                             style: TextStyle(
                               color: Colors.white70,
                               fontSize: 14,
