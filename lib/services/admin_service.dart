@@ -28,7 +28,7 @@ class AdminService {
     }
   }
 
-  // Create intern account - FIXED VERSION
+  // Create intern account - FIXED VERSION using Admin API
   static Future<Map<String, dynamic>> createIntern(
     String name,
     String email,
@@ -37,10 +37,13 @@ class AdminService {
       // Generate temporary password
       String tempPassword = _generateTempPassword();
 
-      // Use regular signUp instead of admin.createUser
-      final response = await supabase.auth.signUp(
-        email: email,
-        password: tempPassword,
+      // Use ADMIN API to create user without logging them in
+      final response = await supabase.auth.admin.createUser(
+        AdminUserAttributes(
+          email: email,
+          password: tempPassword,
+          emailConfirm: true, // Skip email confirmation since you disabled it
+        ),
       );
 
       if (response.user != null) {
@@ -65,7 +68,7 @@ class AdminService {
     }
   }
 
-  // Alternative method if you want to create supervisors too
+  // Alternative method if you want to create supervisors too - ALSO FIXED
   static Future<Map<String, dynamic>> createSupervisor(
     String name,
     String email,
@@ -74,10 +77,13 @@ class AdminService {
       // Generate temporary password
       String tempPassword = _generateTempPassword();
 
-      // Use regular signUp
-      final response = await supabase.auth.signUp(
-        email: email,
-        password: tempPassword,
+      // Use ADMIN API to create user without logging them in
+      final response = await supabase.auth.admin.createUser(
+        AdminUserAttributes(
+          email: email,
+          password: tempPassword,
+          emailConfirm: true,
+        ),
       );
 
       if (response.user != null) {

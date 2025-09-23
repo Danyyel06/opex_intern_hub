@@ -338,7 +338,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         Text(
-                          'Intern: opexinterns@opex.com / opexintern25',
+                          'Intern: opexinterns@opex.com / opexinterns25',
                           style: TextStyle(
                             fontSize: 12,
                             color: Color(0xFF1E3A8A),
