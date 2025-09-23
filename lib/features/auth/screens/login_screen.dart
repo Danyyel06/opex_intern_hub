@@ -324,7 +324,21 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          'Admin: admin2@opex.com / admin123456',
+                          'Admin: opexadmins@opex.com / opexadmins25',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF1E3A8A),
+                          ),
+                        ),
+                        Text(
+                          'Supervisor: opexsupervisor@opex.com / opexsupervisor25',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF1E3A8A),
+                          ),
+                        ),
+                        Text(
+                          'Intern: opexinterns@opex.com / opexintern25',
                           style: TextStyle(
                             fontSize: 12,
                             color: Color(0xFF1E3A8A),

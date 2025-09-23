@@ -1,5 +1,4 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../config/supabase_config.dart';
 import 'dart:math';
 
@@ -29,7 +28,7 @@ class AdminService {
     }
   }
 
-  // Create intern account - integrate with your create intern screen
+  // Create intern account - FIXED VERSION
   static Future<Map<String, dynamic>> createIntern(
     String name,
     String email,
@@ -38,13 +37,10 @@ class AdminService {
       // Generate temporary password
       String tempPassword = _generateTempPassword();
 
-      // Create user in Supabase Auth
-      final response = await supabase.auth.admin.createUser(
-        AdminUserAttributes(
-          email: email,
-          password: tempPassword,
-          emailConfirm: true,
-        ),
+      // Use regular signUp instead of admin.createUser
+      final response = await supabase.auth.signUp(
+        email: email,
+        password: tempPassword,
       );
 
       if (response.user != null) {
@@ -64,6 +60,40 @@ class AdminService {
       }
 
       return {'success': false, 'error': 'Failed to create user'};
+    } catch (e) {
+      return {'success': false, 'error': e.toString()};
+    }
+  }
+
+  // Alternative method if you want to create supervisors too
+  static Future<Map<String, dynamic>> createSupervisor(
+    String name,
+    String email,
+  ) async {
+    try {
+      // Generate temporary password
+      String tempPassword = _generateTempPassword();
+
+      // Use regular signUp
+      final response = await supabase.auth.signUp(
+        email: email,
+        password: tempPassword,
+      );
+
+      if (response.user != null) {
+        // Create profile
+        await supabase.from('profiles').insert({
+          'id': response.user!.id,
+          'email': email,
+          'full_name': name,
+          'role': 'supervisor',
+          'is_onboarded': false,
+        });
+
+        return {'success': true, 'temp_password': tempPassword, 'email': email};
+      }
+
+      return {'success': false, 'error': 'Failed to create supervisor'};
     } catch (e) {
       return {'success': false, 'error': e.toString()};
     }

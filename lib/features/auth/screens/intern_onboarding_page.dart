@@ -209,15 +209,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               const SizedBox(height: 20),
 
-              // Email Section (read-only reference)
+              // Email Section (editable)
               _buildInputField(
                 label: 'Email',
                 icon: Icons.email,
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 hintText: 'tolagben23@gmail.com',
-                enabled: false,
-                validator: (value) => null, // No validation for disabled field
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Please enter your email';
+                  }
+                  if (!RegExp(r'^\S+@\S+\.\S+$').hasMatch(value.trim())) {
+                    return 'Please enter a valid email address';
+                  }
+                  return null;
+                },
               ),
 
               const SizedBox(height: 30),
